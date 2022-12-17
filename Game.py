@@ -1,7 +1,10 @@
+import random
 import sys
 import pygame
 from Text import Text
 from Button import Button
+from Camera import Camera
+from data_loader import load_image
 
 
 class GameStates:
@@ -23,6 +26,16 @@ class Game:
         self.start_button = Button("Начать игру", (30, 400), self.start_game)
         self.exit_button = Button("Выход", (30, 480), self.exit)
 
+        # game
+        self.camera = Camera((0, 0))
+        self.all_sprites = pygame.sprite.Group()
+
+        # проверка работы камеры
+        sprite = pygame.sprite.Sprite()  # помещаем в центр экрана спрайт
+        sprite.image = load_image("test.png")
+        sprite.rect = sprite.image.get_rect()
+        self.all_sprites.add(sprite)
+
     def start_game(self):
         self.state = GameStates.GAME
 
@@ -37,6 +50,9 @@ class Game:
             self.start_button.draw(self.screen)
             self.exit_button.draw(self.screen)
 
+        elif self.state == GameStates.GAME:
+            self.camera.draw(self.screen, self.all_sprites)
+
         pygame.display.flip()
 
     def run(self):
@@ -49,6 +65,10 @@ class Game:
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         self.start_button.check_click(event.pos)
                         self.exit_button.check_click(event.pos)
+                elif self.state == GameStates.GAME:
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        # перемещаем камеру в случайную точку, чтобы оценить правильность отрисовки спрайта
+                        self.camera.set_pos((random.randint(-400, 400), random.randint(-300, 300)))
 
             self.update()
             self.draw()
