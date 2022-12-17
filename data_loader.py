@@ -28,3 +28,7 @@ def load_image(name, colorkey=None):
     loaded_images[name] = image
 
     return image
+
+
+def load_music(name):
+    pygame.mixer.music.load("data/sounds/" + name)
