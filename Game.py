@@ -67,7 +67,7 @@ class Game:
         if self.state == GameStates.GAME:
             if not self.paused:
                 self.sprite.update(ticks)
-                self.player.update()
+                self.player.update(self.labyrinth)
                 self.camera.move_to(
                     self.player.pos
                     +

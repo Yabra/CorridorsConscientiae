@@ -10,6 +10,7 @@ class TileType:
 class Tile(pygame.sprite.Sprite):
     def __init__(self, sprites_group, tiles_group, tile_type, pos):
         super().__init__(sprites_group, tiles_group)
+        self.tile_type = tile_type
         if tile_type == TileType.FLOOR:
             self.image = load_image("floor.png")
         elif tile_type == TileType.WALL:
