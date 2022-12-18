@@ -2,11 +2,12 @@ import sys
 
 import pygame
 
+from AnimatedSprite import AnimatedSprite
 from Button import Button
 from Camera import Camera
 from Player import Player
 from Text import Text
-from data_loader import load_image, load_music, load_sound
+from data_loader import load_image, load_music, load_sound, load_animation
 
 
 class GameStates:
@@ -37,10 +38,8 @@ class Game:
         self.resume_button = Button("Продолжить", (30, 400), self.resume)
         self.in_menu_button = Button("В меню", (30, 480), self.in_menu)
 
-        sprite = pygame.sprite.Sprite()  # помещаем в центр экрана спрайт
-        sprite.image = load_image("obj.png")
-        sprite.rect = sprite.image.get_rect()
-        self.all_sprites.add(sprite)
+        self.sprite = AnimatedSprite(load_animation("test", 5, 5))  # помещаем анимированный спрайт на локацию
+        self.all_sprites.add(self.sprite)
 
         self.player = Player(self.all_sprites, pygame.math.Vector2(100, 100))
 
@@ -60,6 +59,7 @@ class Game:
     def update(self, ticks):
         if self.state == GameStates.GAME:
             if not self.paused:
+                self.sprite.update(ticks)
                 self.player.update()
                 self.camera.move_to(
                     self.player.pos

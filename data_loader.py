@@ -2,10 +2,12 @@ import os
 import sys
 
 import pygame
+from Animation import Animation
 
 loaded_images = {}
 loaded_sounds = {}
 loaded_fonts = {}
+loaded_animations = {}
 
 
 def load_image(name, colorkey=None):
@@ -72,3 +74,15 @@ def load_font(name, size):
     loaded_fonts[(name, size)] = font
     return font
 
+
+def load_animation(name, frames_count, fps):
+    global loaded_animations
+
+    frames = []
+    if (name, frames_count) in loaded_animations.keys():
+        frames = loaded_animations[(name, frames_count)]
+    else:
+        for i in range(frames_count):
+            frames.append(load_image(name + "/" + str(i) + ".png"))
+
+    return Animation(frames, fps)
