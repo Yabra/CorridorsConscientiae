@@ -17,5 +17,7 @@ class Labyrinth:
 
                 if x == 0 or y == 0 or x == size[0] - 1 or y == size[1] - 1:
                     tile_type = TileType.WALL
+                if x == y == 3:
+                    tile_type = TileType.WALL
 
                 Tile(sprites_group, self.tiles_group, tile_type, (x * tile_size, y * tile_size))
