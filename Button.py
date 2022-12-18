@@ -1,4 +1,5 @@
 import pygame
+from data_loader import load_font
 
 
 # Класс кнопки
@@ -14,7 +15,7 @@ class Button:
         self.color = color
         self.font_size = font_size
 
-        self.font = pygame.font.Font(None, self.font_size)
+        self.font = load_font("test.ttf", self.font_size)
         text = self.font.render(self.text, True, self.color)
         self.rect = pygame.Rect(pos[0] - 10, pos[1] - 10, text.get_width() + 10, text.get_height() + 10)
 
@@ -30,4 +31,3 @@ class Button:
     def draw(self, screen):
         text = self.font.render(self.text, True, self.color)
         screen.blit(text, (self.rect.left + 5, self.rect.top + 5))
-        pygame.draw.rect(screen, self.color, self.rect, 1)

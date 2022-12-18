@@ -4,6 +4,7 @@ import pygame
 
 loaded_images = {}
 loaded_sounds = {}
+loaded_fonts = {}
 
 
 def load_image(name, colorkey=None):
@@ -54,4 +55,19 @@ def load_sound(name, volume=1.0):
     sound.set_volume(volume)
     loaded_sounds[name] = sound
     return sound
+
+
+def load_font(name, size):
+    global loaded_fonts
+    if (name, size) in loaded_fonts.keys():
+        return loaded_fonts[(name, size)]
+
+    fullname = os.path.join('data/fonts', name)
+    if not os.path.isfile(fullname):
+        print(f"Файл шрифта '{fullname}' не найден")
+        sys.exit()
+
+    font = pygame.font.Font(fullname, size)
+    loaded_fonts[(name, size)] = font
+    return font
 

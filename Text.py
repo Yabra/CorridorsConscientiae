@@ -1,4 +1,5 @@
 import pygame
+from data_loader import load_font
 
 
 # Класс кнопки
@@ -12,7 +13,7 @@ class Text:
         self.color = color
         self.font_size = font_size
 
-        self.font = pygame.font.Font(None, self.font_size)
+        self.font = load_font("test.ttf", self.font_size)
         text = self.font.render(self.text, True, self.color)
         self.pos = (pos[0] - text.get_width() // 2, pos[1] - text.get_height() // 2)
 
