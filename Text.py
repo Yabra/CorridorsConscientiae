@@ -1,4 +1,3 @@
-import pygame
 from data_loader import load_font
 
 

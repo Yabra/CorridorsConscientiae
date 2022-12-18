@@ -1,5 +1,6 @@
 import os
 import sys
+
 import pygame
 
 loaded_images = {}
@@ -43,8 +44,8 @@ def load_music(name):
 
 def load_sound(name, volume=1.0):
     global loaded_sounds
-    if name in loaded_sounds.keys():
-        return loaded_sounds[name]
+    if (name, volume) in loaded_sounds.keys():
+        return loaded_sounds[(name, volume)]
 
     fullname = os.path.join('data/sounds', name)
     if not os.path.isfile(fullname):
@@ -53,7 +54,7 @@ def load_sound(name, volume=1.0):
 
     sound = pygame.mixer.Sound(fullname)
     sound.set_volume(volume)
-    loaded_sounds[name] = sound
+    loaded_sounds[(name, volume)] = sound
     return sound
 
 

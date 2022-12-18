@@ -1,10 +1,12 @@
 import sys
+
 import pygame
-from data_loader import load_image, load_music, load_sound
-from Text import Text
+
 from Button import Button
 from Camera import Camera
 from Player import Player
+from Text import Text
+from data_loader import load_image, load_music, load_sound
 
 
 class GameStates:

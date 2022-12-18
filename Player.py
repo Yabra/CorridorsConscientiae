@@ -1,10 +1,12 @@
 import pygame
+
 from data_loader import load_image
 
 
 class Player(pygame.sprite.Sprite):
     speed = 3
 
+    # pos - изначальная позиция игрока (pygame.math.Vector2)
     def __init__(self, sprites_group, pos):
         super().__init__(sprites_group)
         self.pos = pos

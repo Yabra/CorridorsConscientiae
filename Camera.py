@@ -1,6 +1,3 @@
-import pygame
-
-
 class Camera:
     # pos - изначальная позиция камеры (pygame.math.Vector2)
     def __init__(self, pos):

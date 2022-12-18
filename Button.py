@@ -1,13 +1,14 @@
 import pygame
+
 from data_loader import load_font
 
 
 # Класс кнопки
 class Button:
-    # text       - оторажаемый в кнопке текст
-    # pos        - кортеж с 2 координатами левого левого угла кнопки
+    # text       - отображаемый в кнопке текст
+    # pos        - кортеж с 2 координатами левого верхнего угла кнопки
     # click_func - функция, вызывающаяся при нажатии на кнопку
-    # color      - цвет текста и рамочки
+    # color      - цвет текста
     # font_size  - размер отображаемого текста
     def __init__(self, text, pos, click_func, color=(0, 0, 200), font_size=50):
         self.text = text
