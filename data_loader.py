@@ -3,6 +3,7 @@ import sys
 import pygame
 
 loaded_images = {}
+loaded_sounds = {}
 
 
 def load_image(name, colorkey=None):
@@ -31,4 +32,26 @@ def load_image(name, colorkey=None):
 
 
 def load_music(name):
-    pygame.mixer.music.load("data/sounds/" + name)
+    fullname = os.path.join('data/sounds', name)
+    if not os.path.isfile(fullname):
+        print(f"Звуковой файл '{fullname}' не найден")
+        sys.exit()
+
+    pygame.mixer.music.load(fullname)
+
+
+def load_sound(name, volume=1.0):
+    global loaded_sounds
+    if name in loaded_sounds.keys():
+        return loaded_sounds[name]
+
+    fullname = os.path.join('data/sounds', name)
+    if not os.path.isfile(fullname):
+        print(f"Звуковой файл '{fullname}' не найден")
+        sys.exit()
+
+    sound = pygame.mixer.Sound(fullname)
+    sound.set_volume(volume)
+    loaded_sounds[name] = sound
+    return sound
+

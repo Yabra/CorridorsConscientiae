@@ -4,7 +4,7 @@ import pygame
 from Text import Text
 from Button import Button
 from Camera import Camera
-from data_loader import load_image, load_music
+from data_loader import load_image, load_music, load_sound
 
 
 class GameStates:
@@ -37,7 +37,7 @@ class Game:
         self.all_sprites.add(sprite)
 
         # music load
-        load_music("test.ogg")
+        load_music("test_music.ogg")
 
     def start_game(self):
         self.state = GameStates.GAME
@@ -72,6 +72,8 @@ class Game:
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         # перемещаем камеру в случайную точку, чтобы оценить правильность отрисовки спрайта
                         self.camera.set_pos((random.randint(-400, 400), random.randint(-300, 300)))
+                        # проигрываем тестовый звук
+                        load_sound("test.wav", 0.1).play()
 
             # music replay
             if not pygame.mixer.music.get_busy():
