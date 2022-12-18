@@ -22,6 +22,8 @@ class Game:
         pygame.init()
         pygame.display.set_caption("Corridors Conscientiae")
         self.screen = pygame.display.set_mode((800, 600))
+        pygame.display.set_icon(load_image("test.png"))
+
         self.clock = pygame.time.Clock()
 
         # menu
