@@ -1,4 +1,3 @@
-import random
 import sys
 import pygame
 from data_loader import load_image, load_music, load_sound
@@ -28,10 +27,14 @@ class Game:
         self.exit_button = Button("Выход", (30, 480), self.exit)
 
         # game
-        self.camera = Camera([0, 0])
+        self.paused = False
+        self.camera = Camera(pygame.math.Vector2(0, 0))
         self.all_sprites = pygame.sprite.Group()
 
-        # проверка работы камеры
+        self.paused_text = Text("Пауза", (400, 150), font_size=70)
+        self.resume_button = Button("Продолжить", (30, 400), self.resume)
+        self.in_menu_button = Button("В меню", (30, 480), self.in_menu)
+
         sprite = pygame.sprite.Sprite()  # помещаем в центр экрана спрайт
         sprite.image = load_image("obj.png")
         sprite.rect = sprite.image.get_rect()
@@ -43,20 +46,28 @@ class Game:
         load_music("test_music.ogg")
 
     def start_game(self):
+        self.paused = False
         self.state = GameStates.GAME
+
+    def in_menu(self):
+        self.state = GameStates.MENU
+
+    def resume(self):
+        self.paused = False
 
     def update(self, ticks):
         if self.state == GameStates.GAME:
-            self.player.update()
-            self.camera.move_to(
-                self.player.pos
-                +
-                pygame.math.Vector2(
-                    self.player.rect.width / 2,
-                    self.player.rect.height / 2
+            if not self.paused:
+                self.player.update()
+                self.camera.move_to(
+                    self.player.pos
+                    +
+                    pygame.math.Vector2(
+                        self.player.rect.width / 2,
+                        self.player.rect.height / 2
+                    )
                 )
-            )
-            self.camera.update(ticks)
+                self.camera.update(ticks)
 
     def draw(self):
         self.screen.fill((0, 0, 0))
@@ -68,6 +79,11 @@ class Game:
 
         elif self.state == GameStates.GAME:
             self.camera.draw(self.screen, self.all_sprites)
+
+            if self.paused:
+                self.paused_text.draw(self.screen)
+                self.resume_button.draw(self.screen)
+                self.in_menu_button.draw(self.screen)
 
         pygame.display.flip()
 
@@ -82,9 +98,15 @@ class Game:
                         self.start_button.check_click(event.pos)
                         self.exit_button.check_click(event.pos)
                 elif self.state == GameStates.GAME:
-                    if event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_ESCAPE:
+                            self.paused = not self.paused
+                    elif event.type == pygame.MOUSEBUTTONDOWN:
                         # проигрываем тестовый звук
                         load_sound("test.wav", 0.1).play()
+
+                        self.resume_button.check_click(event.pos)
+                        self.in_menu_button.check_click(event.pos)
 
             ticks = self.clock.tick(60)
 

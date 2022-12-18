@@ -24,15 +24,15 @@ class Camera:
         self.pos = self.start_pos + (self.end_pos - self.start_pos) / 1000 * self.time
 
     def draw(self, screen, sprites):
-        dx = -(self.pos.x - screen.get_size()[0] // 2)
-        dy = -(self.pos.y - screen.get_size()[1] // 2)
-
-        for s in sprites:
-            s.rect.x += dx
-            s.rect.y += dy
-
-        sprites.draw(screen)
+        dx = int(self.pos.x) - screen.get_size()[0] // 2
+        dy = int(self.pos.y) - screen.get_size()[1] // 2
 
         for s in sprites:
             s.rect.x -= dx
             s.rect.y -= dy
+
+        sprites.draw(screen)
+
+        for s in sprites:
+            s.rect.x += dx
+            s.rect.y += dy
