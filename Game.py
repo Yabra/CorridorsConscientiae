@@ -3,10 +3,11 @@ import sys
 import pygame
 
 from AnimatedSprite import AnimatedSprite
+from Text import Text
 from Button import Button
 from Camera import Camera
 from Player import Player
-from Text import Text
+from Labyrinth import Labyrinth
 from data_loader import load_image, load_music, load_sound, load_animation
 
 
@@ -33,17 +34,21 @@ class Game:
 
         # game
         self.paused = False
-        self.camera = Camera(pygame.math.Vector2(0, 0))
+        self.camera = Camera(pygame.math.Vector2(64 * 5, 64 * 5))
         self.all_sprites = pygame.sprite.Group()
 
         self.paused_text = Text("Пауза", (400, 150), font_size=70)
         self.resume_button = Button("Продолжить", (30, 400), self.resume)
         self.in_menu_button = Button("В меню", (30, 480), self.in_menu)
 
+        self.labyrinth = Labyrinth(self.all_sprites, (10, 10))
+
         self.sprite = AnimatedSprite(load_animation("test", 5, 5))  # помещаем анимированный спрайт на локацию
+        self.sprite.rect.x = 64 * 5
+        self.sprite.rect.y = 64 * 5
         self.all_sprites.add(self.sprite)
 
-        self.player = Player(self.all_sprites, pygame.math.Vector2(100, 100))
+        self.player = Player(self.all_sprites, pygame.math.Vector2(64 * 5, 64 * 5))
 
         # music load
         load_music("test_music.ogg")
