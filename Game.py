@@ -31,7 +31,13 @@ class Game:
         self.camera = Camera([0, 0])
         self.all_sprites = pygame.sprite.Group()
 
-        self.player = Player(self.all_sprites, 0, 0)
+        # проверка работы камеры
+        sprite = pygame.sprite.Sprite()  # помещаем в центр экрана спрайт
+        sprite.image = load_image("obj.png")
+        sprite.rect = sprite.image.get_rect()
+        self.all_sprites.add(sprite)
+
+        self.player = Player(self.all_sprites, pygame.math.Vector2(100, 100))
 
         # music load
         load_music("test_music.ogg")
@@ -39,9 +45,18 @@ class Game:
     def start_game(self):
         self.state = GameStates.GAME
 
-    def update(self):
+    def update(self, ticks):
         if self.state == GameStates.GAME:
             self.player.update()
+            self.camera.move_to(
+                self.player.pos
+                +
+                pygame.math.Vector2(
+                    self.player.rect.width / 2,
+                    self.player.rect.height / 2
+                )
+            )
+            self.camera.update(ticks)
 
     def draw(self):
         self.screen.fill((0, 0, 0))
@@ -71,14 +86,14 @@ class Game:
                         # проигрываем тестовый звук
                         load_sound("test.wav", 0.1).play()
 
+            ticks = self.clock.tick(60)
+
             # music replay
             if not pygame.mixer.music.get_busy():
                 pygame.mixer.music.play()
 
-            self.update()
+            self.update(ticks)
             self.draw()
-
-            self.clock.tick(60)
 
     def exit(self):
         pygame.quit()
