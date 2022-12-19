@@ -22,6 +22,7 @@ class GameStates:
 # Основной класс игры
 class Game:
     def __init__(self):
+        load_settings()
         self.state = GameStates.MENU
         pygame.init()
         pygame.display.set_caption("Corridors Conscientiae")
@@ -179,4 +180,5 @@ class Game:
 
     def exit(self):
         pygame.quit()
+        save_settings()
         sys.exit()

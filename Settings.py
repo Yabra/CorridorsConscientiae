@@ -2,11 +2,25 @@ import pygame
 
 
 def save_settings():
-    pass
+    settings_file = open("settings", "w")
+    settings_file.write(str(Settings.SOUNDS_VOLUME) + "\n")
+    settings_file.write(str(Settings.MUSIC_VOLUME) + "\n")
+    settings_file.close()
 
 
 def load_settings():
-    pass
+    try:
+        settings_file = open("settings", "r")
+        Settings.SOUNDS_VOLUME = float(settings_file.readline())
+        Settings.MUSIC_VOLUME = float(settings_file.readline())
+
+    except ValueError as e:
+        Settings.SOUNDS_VOLUME = 1.0
+        Settings.MUSIC_VOLUME = 1.0
+
+    finally:
+        settings_file.close()
+        save_settings()
 
 
 def add_sounds_volume():
