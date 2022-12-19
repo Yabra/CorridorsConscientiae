@@ -1,7 +1,5 @@
 import sys
 
-import pygame
-
 from AnimatedSprite import AnimatedSprite
 from Text import Text
 from Button import Button
@@ -73,16 +71,36 @@ class Game:
         # music load
         load_music("test_music.ogg")
 
+    # метод перехода в меню
     def in_menu(self):
         self.state = GameStates.MENU
 
+    # метод для старта игры
     def start_game(self):
-        self.paused = False
         self.state = GameStates.GAME
 
+        self.paused = False
+        self.camera = Camera(pygame.math.Vector2(64 * 5, 64 * 5))
+        self.all_sprites = pygame.sprite.Group()
+
+        self.paused_text = Text("Пауза", (400, 150), font_size=70)
+        self.resume_button = Button("Продолжить", (150, 400), self.resume)
+        self.in_menu_button = Button("В меню", (150, 480), self.in_menu)
+
+        self.labyrinth = Labyrinth(self.all_sprites, (10, 10))
+
+        self.sprite = AnimatedSprite(load_animation("test", 5, 5))  # помещаем анимированный спрайт на локацию
+        self.sprite.rect.x = 64 * 5
+        self.sprite.rect.y = 64 * 5
+        self.all_sprites.add(self.sprite)
+
+        self.player = Player(self.all_sprites, pygame.math.Vector2(64 * 5, 64 * 5))
+
+    # метод перехода в настройки
     def in_settings(self):
         self.state = GameStates.SETTINGS
 
+    # метод снятия игры с паузы
     def resume(self):
         self.paused = False
 
@@ -143,31 +161,34 @@ class Game:
     def run(self):
         while True:
             for event in pygame.event.get():
-                if event.type == pygame.QUIT:
+                if event.type == pygame.QUIT:  # обработка закрытия оккна крестиком
                     self.exit()
 
+                # орбработка нажатий клавиш клавиатуры и кликов
                 if self.state == GameStates.MENU:
                     if event.type == pygame.MOUSEBUTTONUP:
-                        self.start_button.check_click(event.pos)
-                        self.settings_button.check_click(event.pos)
-                        self.exit_button.check_click(event.pos)
+                        if event.button == 1:
+                            self.start_button.check_click(event.pos)
+                            self.settings_button.check_click(event.pos)
+                            self.exit_button.check_click(event.pos)
                 elif self.state == GameStates.GAME:
                     if event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_ESCAPE:
                             self.paused = not self.paused
                     elif event.type == pygame.MOUSEBUTTONUP:
-                        # проигрываем тестовый звук
-                        load_sound("test.wav", 0.1).play()
-                        if self.paused:
-                            self.resume_button.check_click(event.pos)
-                            self.in_menu_button.check_click(event.pos)
+                        if event.button == 1:
+                            load_sound("test.wav", 0.1).play()  # проигрываем тестовый звук
+                            if self.paused:
+                                self.resume_button.check_click(event.pos)
+                                self.in_menu_button.check_click(event.pos)
                 elif self.state == GameStates.SETTINGS:
                     if event.type == pygame.MOUSEBUTTONUP:
-                        self.sub_sounds_volume_button.check_click(event.pos)
-                        self.add_sounds_volume_button.check_click(event.pos)
-                        self.sub_music_volume_button.check_click(event.pos)
-                        self.add_music_volume_button.check_click(event.pos)
-                        self.in_menu_from_settings_button.check_click(event.pos)
+                        if event.button == 1:
+                            self.sub_sounds_volume_button.check_click(event.pos)
+                            self.add_sounds_volume_button.check_click(event.pos)
+                            self.sub_music_volume_button.check_click(event.pos)
+                            self.add_music_volume_button.check_click(event.pos)
+                            self.in_menu_from_settings_button.check_click(event.pos)
 
             ticks = self.clock.tick(60)
 

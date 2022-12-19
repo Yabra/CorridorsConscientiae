@@ -17,6 +17,8 @@ class Text:
         self.rendered_text = self.font.render(self.text, True, self.color)
         self.pos = (pos[0] - self.rendered_text.get_width() // 2, pos[1] - self.rendered_text.get_height() // 2)
 
+    # функция для изменения текста
+    # new_text - текст на который сменится содержание объекта
     def change_text(self, new_text):
         self.text = new_text
         self.rendered_text = self.font.render(self.text, True, self.color)

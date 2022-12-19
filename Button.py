@@ -3,7 +3,6 @@ import pygame
 from data_loader import load_font
 
 
-# Класс кнопки
 class Button:
     # text       - отображаемый в кнопке текст
     # pos        - кортеж с координатами центра кнопки
@@ -25,6 +24,7 @@ class Button:
             self.rendered_text.get_height()
         )
 
+    # check_click вызывается при событии отпускания кнопки мыши
     # pos - позиция клика
     def check_click(self, pos):
         if (

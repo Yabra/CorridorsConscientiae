@@ -4,12 +4,14 @@ from Tile import Tile, TileType
 
 
 class Labyrinth:
+    # sprites_group - группа всех спрайтов для отрисовки камерой
+    # size          - кортеж с размерами лабиринта в клетках
     def __init__(self, sprites_group, size):
         tile_size = load_image("floor.png").get_width()
         self.size = size
         self.tiles_group = pygame.sprite.Group()
         self.sprites_group = sprites_group
-        self.tiles = [[None for y in range(size[0])] for x in range(size[1])]
+        self.tiles = [[None for _y in range(size[0])] for _x in range(size[1])]
 
         for x in range(size[0]):
             for y in range(size[1]):

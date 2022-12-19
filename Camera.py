@@ -6,7 +6,7 @@ class Camera:
         self.end_pos = pos
         self.time = 0
 
-    # end_pos - позиция куда камера будет передвигаться (pygame.math.Vector2)
+    # end_pos - позиция куда камера будет медленно передвигаться (pygame.math.Vector2)
     def move_to(self, end_pos):
         self.start_pos = self.pos
         self.end_pos = end_pos

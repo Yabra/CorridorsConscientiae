@@ -3,7 +3,6 @@ import pygame
 from data_loader import load_image
 
 
-# Класс кнопки
 class ImageButton:
     # image_name - имя файла изображения
     # pos        - кортеж с 2 координатами левого верхнего угла кнопки
@@ -13,6 +12,7 @@ class ImageButton:
         self.image = load_image(image_name)
         self.rect = pygame.Rect(pos[0], pos[1], self.image.get_width(), self.image.get_height())
 
+    # check_click вызывается при событии отпускания кнопки мыши
     # pos - позиция клика
     def check_click(self, pos):
         if (
