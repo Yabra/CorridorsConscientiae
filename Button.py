@@ -17,8 +17,8 @@ class Button:
         self.font_size = font_size
 
         self.font = load_font("test.ttf", self.font_size)
-        text = self.font.render(self.text, True, self.color)
-        self.rect = pygame.Rect(pos[0] - 10, pos[1] - 10, text.get_width() + 10, text.get_height() + 10)
+        self.text = self.font.render(self.text, True, self.color)
+        self.rect = pygame.Rect(pos[0] - 10, pos[1] - 10, self.text.get_width() + 10, self.text.get_height() + 10)
 
     # pos - позиция клика
     def check_click(self, pos):
@@ -30,5 +30,4 @@ class Button:
             self.click_func()
 
     def draw(self, screen):
-        text = self.font.render(self.text, True, self.color)
-        screen.blit(text, (self.rect.left + 5, self.rect.top + 5))
+        screen.blit(self.text, (self.rect.left + 5, self.rect.top + 5))

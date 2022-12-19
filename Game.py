@@ -5,6 +5,7 @@ import pygame
 from AnimatedSprite import AnimatedSprite
 from Text import Text
 from Button import Button
+from ImageButton import ImageButton
 from Camera import Camera
 from Player import Player
 from Labyrinth import Labyrinth
@@ -30,6 +31,7 @@ class Game:
         # menu
         self.game_title_text = Text("Corridors Conscientiae", (400, 150), font_size=70)
         self.start_button = Button("Начать игру", (30, 400), self.start_game)
+        self.settings_button = ImageButton("obj.png", (700, 500), lambda: print("Settings"))
         self.exit_button = Button("Выход", (30, 480), self.exit)
 
         # game
@@ -84,6 +86,7 @@ class Game:
         if self.state == GameStates.MENU:
             self.game_title_text.draw(self.screen)
             self.start_button.draw(self.screen)
+            self.settings_button.draw(self.screen)
             self.exit_button.draw(self.screen)
 
         elif self.state == GameStates.GAME:
@@ -103,19 +106,20 @@ class Game:
                     self.exit()
 
                 if self.state == GameStates.MENU:
-                    if event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.type == pygame.MOUSEBUTTONUP:
                         self.start_button.check_click(event.pos)
+                        self.settings_button.check_click(event.pos)
                         self.exit_button.check_click(event.pos)
                 elif self.state == GameStates.GAME:
                     if event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_ESCAPE:
                             self.paused = not self.paused
-                    elif event.type == pygame.MOUSEBUTTONDOWN:
+                    elif event.type == pygame.MOUSEBUTTONUP:
                         # проигрываем тестовый звук
                         load_sound("test.wav", 0.1).play()
-
-                        self.resume_button.check_click(event.pos)
-                        self.in_menu_button.check_click(event.pos)
+                        if self.paused:
+                            self.resume_button.check_click(event.pos)
+                            self.in_menu_button.check_click(event.pos)
 
             ticks = self.clock.tick(60)
 
