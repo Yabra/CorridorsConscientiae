@@ -10,11 +10,13 @@ from Camera import Camera
 from Player import Player
 from Labyrinth import Labyrinth
 from data_loader import load_image, load_music, load_sound, load_animation
+from Settings import *
 
 
 class GameStates:
     MENU = 0
     GAME = 1
+    SETTINGS = 2
 
 
 # Основной класс игры
@@ -30,9 +32,9 @@ class Game:
 
         # menu
         self.game_title_text = Text("Corridors Conscientiae", (400, 150), font_size=70)
-        self.start_button = Button("Начать игру", (30, 400), self.start_game)
-        self.settings_button = ImageButton("obj.png", (700, 500), lambda: print("Settings"))
-        self.exit_button = Button("Выход", (30, 480), self.exit)
+        self.start_button = Button("Начать игру", (150, 400), self.start_game)
+        self.exit_button = Button("Выход", (150, 480), self.exit)
+        self.settings_button = ImageButton("obj.png", (700, 500), self.in_settings)
 
         # game
         self.paused = False
@@ -40,8 +42,8 @@ class Game:
         self.all_sprites = pygame.sprite.Group()
 
         self.paused_text = Text("Пауза", (400, 150), font_size=70)
-        self.resume_button = Button("Продолжить", (30, 400), self.resume)
-        self.in_menu_button = Button("В меню", (30, 480), self.in_menu)
+        self.resume_button = Button("Продолжить", (150, 400), self.resume)
+        self.in_menu_button = Button("В меню", (150, 480), self.in_menu)
 
         self.labyrinth = Labyrinth(self.all_sprites, (10, 10))
 
@@ -52,21 +54,41 @@ class Game:
 
         self.player = Player(self.all_sprites, pygame.math.Vector2(64 * 5, 64 * 5))
 
+        # settings
+        self.settings_text = Text("Настройки", (400, 100), font_size=70)
+
+        self.sounds_volume_text = Text("Громкость звуков", (400, 250), font_size=30)
+        self.sounds_volume_value_text = Text("", (400, 300), font_size=50)
+        self.sub_sounds_volume_button = Button("-", (320, 290), sub_sounds_volume, font_size=70)
+        self.add_sounds_volume_button = Button("+", (480, 290), add_sounds_volume, font_size=70)
+
+        self.music_volume_text = Text("Громкость музыки", (400, 350), font_size=30)
+        self.music_volume_value_text = Text("", (400, 400), font_size=50)
+        self.sub_music_volume_button = Button("-", (320, 390), sub_music_volume, font_size=70)
+        self.add_music_volume_button = Button("+", (480, 390), add_music_volume, font_size=70)
+
+        self.in_menu_from_settings_button = Button("В меню", (400, 500), self.in_menu)
+
         # music load
         load_music("test_music.ogg")
+
+    def in_menu(self):
+        self.state = GameStates.MENU
 
     def start_game(self):
         self.paused = False
         self.state = GameStates.GAME
 
-    def in_menu(self):
-        self.state = GameStates.MENU
+    def in_settings(self):
+        self.state = GameStates.SETTINGS
 
     def resume(self):
         self.paused = False
 
     def update(self, ticks):
-        if self.state == GameStates.GAME:
+        if self.state == GameStates.MENU:
+            pass
+        elif self.state == GameStates.GAME:
             if not self.paused:
                 self.sprite.update(ticks)
                 self.player.update(self.labyrinth)
@@ -79,6 +101,9 @@ class Game:
                     )
                 )
                 self.camera.update(ticks)
+        elif self.state == GameStates.SETTINGS:
+            self.sounds_volume_value_text.change_text(str(int(Settings.SOUNDS_VOLUME * 100)) + "%")
+            self.music_volume_value_text.change_text(str(int(Settings.MUSIC_VOLUME * 100)) + "%")
 
     def draw(self):
         self.screen.fill((0, 0, 0))
@@ -96,6 +121,21 @@ class Game:
                 self.paused_text.draw(self.screen)
                 self.resume_button.draw(self.screen)
                 self.in_menu_button.draw(self.screen)
+
+        elif self.state == GameStates.SETTINGS:
+            self.settings_text.draw(self.screen)
+
+            self.sounds_volume_text.draw(self.screen)
+            self.sounds_volume_value_text.draw(self.screen)
+            self.sub_sounds_volume_button.draw(self.screen)
+            self.add_sounds_volume_button.draw(self.screen)
+
+            self.music_volume_text.draw(self.screen)
+            self.music_volume_value_text.draw(self.screen)
+            self.sub_music_volume_button.draw(self.screen)
+            self.add_music_volume_button.draw(self.screen)
+
+            self.in_menu_from_settings_button.draw(self.screen)
 
         pygame.display.flip()
 
@@ -120,6 +160,13 @@ class Game:
                         if self.paused:
                             self.resume_button.check_click(event.pos)
                             self.in_menu_button.check_click(event.pos)
+                elif self.state == GameStates.SETTINGS:
+                    if event.type == pygame.MOUSEBUTTONUP:
+                        self.sub_sounds_volume_button.check_click(event.pos)
+                        self.add_sounds_volume_button.check_click(event.pos)
+                        self.sub_music_volume_button.check_click(event.pos)
+                        self.add_music_volume_button.check_click(event.pos)
+                        self.in_menu_from_settings_button.check_click(event.pos)
 
             ticks = self.clock.tick(60)
 

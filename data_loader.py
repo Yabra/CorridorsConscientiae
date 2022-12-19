@@ -3,6 +3,7 @@ import sys
 
 import pygame
 from Animation import Animation
+from Settings import Settings
 
 loaded_images = {}
 loaded_sounds = {}
@@ -46,8 +47,8 @@ def load_music(name):
 
 def load_sound(name, volume=1.0):
     global loaded_sounds
-    if (name, volume) in loaded_sounds.keys():
-        return loaded_sounds[(name, volume)]
+    if (name, volume * Settings.SOUNDS_VOLUME) in loaded_sounds.keys():
+        return loaded_sounds[(name, volume * Settings.SOUNDS_VOLUME)]
 
     fullname = os.path.join('data/sounds', name)
     if not os.path.isfile(fullname):
@@ -55,8 +56,8 @@ def load_sound(name, volume=1.0):
         sys.exit()
 
     sound = pygame.mixer.Sound(fullname)
-    sound.set_volume(volume)
-    loaded_sounds[(name, volume)] = sound
+    sound.set_volume(volume * Settings.SOUNDS_VOLUME)
+    loaded_sounds[(name, volume * Settings.SOUNDS_VOLUME)] = sound
     return sound
 
 

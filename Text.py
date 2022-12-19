@@ -11,11 +11,19 @@ class Text:
         self.text = text
         self.color = color
         self.font_size = font_size
+        self.center_pos = pos
 
         self.font = load_font("test.ttf", self.font_size)
-        text = self.font.render(self.text, True, self.color)
-        self.pos = (pos[0] - text.get_width() // 2, pos[1] - text.get_height() // 2)
+        self.rendered_text = self.font.render(self.text, True, self.color)
+        self.pos = (pos[0] - self.rendered_text.get_width() // 2, pos[1] - self.rendered_text.get_height() // 2)
+
+    def change_text(self, new_text):
+        self.text = new_text
+        self.rendered_text = self.font.render(self.text, True, self.color)
+        self.pos = (
+            self.center_pos[0] - self.rendered_text.get_width() // 2,
+            self.center_pos[1] - self.rendered_text.get_height() // 2
+        )
 
     def draw(self, screen):
-        text = self.font.render(self.text, True, self.color)
-        screen.blit(text, self.pos)
+        screen.blit(self.rendered_text, self.pos)
