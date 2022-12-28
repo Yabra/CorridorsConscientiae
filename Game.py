@@ -9,6 +9,7 @@ from Player import Player
 from Labyrinth import Labyrinth
 from data_loader import load_image, load_music, load_sound, load_animation
 from Settings import *
+from StateTransition import StateTransition
 
 
 class GameStates:
@@ -28,12 +29,13 @@ class Game:
         pygame.display.set_icon(load_image("test.png"))
 
         self.clock = pygame.time.Clock()
+        self.block_buttons = False  # переменная для блокировки нажатия кнопок
 
         # menu
         self.game_title_text = Text("Corridors Conscientiae", (400, 150), font_size=70)
-        self.start_button = Button("Начать игру", (150, 400), self.start_game)
+        self.start_button = Button("Начать игру", (150, 400), lambda: self.make_state_transition(self.start_game))
         self.exit_button = Button("Выход", (150, 480), self.exit)
-        self.settings_button = ImageButton("obj.png", (700, 500), self.in_settings)
+        self.settings_button = ImageButton("obj.png", (700, 500), lambda: self.make_state_transition(self.in_settings))
 
         # game
         self.paused = False
@@ -42,7 +44,7 @@ class Game:
 
         self.paused_text = Text("Пауза", (400, 150), font_size=70)
         self.resume_button = Button("Продолжить", (150, 400), self.resume)
-        self.in_menu_button = Button("В меню", (150, 480), self.in_menu)
+        self.in_menu_button = Button("В меню", (150, 480), lambda: self.make_state_transition(self.in_menu))
 
         self.labyrinth = Labyrinth(self.all_sprites, (10, 10))
 
@@ -66,14 +68,23 @@ class Game:
         self.sub_music_volume_button = Button("-", (320, 390), sub_music_volume, font_size=70)
         self.add_music_volume_button = Button("+", (480, 390), add_music_volume, font_size=70)
 
-        self.in_menu_from_settings_button = Button("В меню", (400, 500), self.in_menu)
+        self.in_menu_from_settings_button = Button("В меню", (400, 500), lambda: self.make_state_transition(self.in_menu))
 
         # music load
         load_music("test_music.ogg")
 
+    # метод для начала плавного перехода между состояниями игры
+    def make_state_transition(self, func):
+        StateTransition.to_black(func)
+        self.block_buttons = True
+
     # метод перехода в меню
     def in_menu(self):
         self.state = GameStates.MENU
+
+        # окончание плавного перехода и возвражение кнопкам кликабельности
+        StateTransition.from_black(None)
+        self.block_buttons = False
 
     # метод для старта игры
     def start_game(self):
@@ -82,10 +93,6 @@ class Game:
         self.paused = False
         self.camera = Camera(pygame.math.Vector2(64 * 5, 64 * 5))
         self.all_sprites = pygame.sprite.Group()
-
-        self.paused_text = Text("Пауза", (400, 150), font_size=70)
-        self.resume_button = Button("Продолжить", (150, 400), self.resume)
-        self.in_menu_button = Button("В меню", (150, 480), self.in_menu)
 
         self.labyrinth = Labyrinth(self.all_sprites, (10, 10))
 
@@ -96,9 +103,17 @@ class Game:
 
         self.player = Player(self.all_sprites, pygame.math.Vector2(64 * 5, 64 * 5))
 
+        # окончание плавного перехода и возвражение кнопкам кликабельности
+        StateTransition.from_black(None)
+        self.block_buttons = False
+
     # метод перехода в настройки
     def in_settings(self):
         self.state = GameStates.SETTINGS
+
+        # окончание плавного перехода и возвражение кнопкам кликабельности
+        StateTransition.from_black(None)
+        self.block_buttons = False
 
     # метод снятия игры с паузы
     def resume(self):
@@ -123,6 +138,9 @@ class Game:
         elif self.state == GameStates.SETTINGS:
             self.sounds_volume_value_text.change_text(str(int(Settings.SOUNDS_VOLUME * 100)) + "%")
             self.music_volume_value_text.change_text(str(int(Settings.MUSIC_VOLUME * 100)) + "%")
+
+        # обновление плавного перехода
+        StateTransition.update(ticks)
 
     def draw(self):
         self.screen.fill((0, 0, 0))
@@ -156,6 +174,9 @@ class Game:
 
             self.in_menu_from_settings_button.draw(self.screen)
 
+        # отрисовка плавного перехода
+        StateTransition.draw(self.screen)
+
         pygame.display.flip()
 
     def run(self):
@@ -167,7 +188,7 @@ class Game:
                 # орбработка нажатий клавиш клавиатуры и кликов
                 if self.state == GameStates.MENU:
                     if event.type == pygame.MOUSEBUTTONUP:
-                        if event.button == 1:
+                        if event.button == 1 and not self.block_buttons:
                             self.start_button.check_click(event.pos)
                             self.settings_button.check_click(event.pos)
                             self.exit_button.check_click(event.pos)
@@ -176,14 +197,14 @@ class Game:
                         if event.key == pygame.K_ESCAPE:
                             self.paused = not self.paused
                     elif event.type == pygame.MOUSEBUTTONUP:
-                        if event.button == 1:
+                        if event.button == 1 and not self.block_buttons:
                             load_sound("test.wav", 0.1).play()  # проигрываем тестовый звук
                             if self.paused:
                                 self.resume_button.check_click(event.pos)
                                 self.in_menu_button.check_click(event.pos)
                 elif self.state == GameStates.SETTINGS:
                     if event.type == pygame.MOUSEBUTTONUP:
-                        if event.button == 1:
+                        if event.button == 1 and not self.block_buttons:
                             self.sub_sounds_volume_button.check_click(event.pos)
                             self.add_sounds_volume_button.check_click(event.pos)
                             self.sub_music_volume_button.check_click(event.pos)
