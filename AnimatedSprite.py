@@ -7,6 +7,7 @@ class AnimatedSprite(pygame.sprite.Sprite):
         super().__init__()
         self.animation = animation
         self.rect = self.animation.get_current_frame().get_rect()
+        self.image = self.animation.get_current_frame()
 
     # update должен вызываться перед отрисовкой для обновления кадра на текущий
     # ticks - количество прошедших милисекунд
