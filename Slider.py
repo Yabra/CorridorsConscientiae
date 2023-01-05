@@ -32,11 +32,12 @@ class Slider:
         if button[0]:
             pos = pygame.mouse.get_pos()
             x = pos[0]
-            if x > self.x + self.w:
-                self.slider_x = self.x + self.w
-            elif x < self.x:
-                self.slider_x = self.x
-            else:
-                self.slider_x = x
-
-
+            y = pos[1]
+            if y in range(self.y + self.h // 2 - self.r, self.y + self.h // 2 + self.r)\
+                    and x in range(self.slider_x - self.r, self.slider_x + self.r):
+                if x > self.x + self.w:
+                    self.slider_x = self.x + self.w
+                elif x < self.x:
+                    self.slider_x = self.x
+                else:
+                    self.slider_x = x
