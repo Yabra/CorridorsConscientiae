@@ -7,6 +7,7 @@ from ImageButton import ImageButton
 from Camera import Camera
 from Player import Player
 from Labyrinth import Labyrinth
+from Item import Item
 from data_loader import load_image, load_music, load_sound, load_animation
 from Settings import *
 from StateTransition import StateTransition
@@ -41,6 +42,7 @@ class Game:
         self.paused = False
         self.camera = Camera(pygame.math.Vector2(64 * 5, 64 * 5))
         self.all_sprites = pygame.sprite.Group()
+        self.all_items = pygame.sprite.Group()
 
         self.paused_text = Text("Пауза", (400, 150), font_size=70)
         self.resume_button = Button("Продолжить", (150, 400), self.resume)
@@ -95,6 +97,7 @@ class Game:
         self.paused = False
         self.camera = Camera(pygame.math.Vector2(64 * 5, 64 * 5))
         self.all_sprites = pygame.sprite.Group()
+        self.all_items = pygame.sprite.Group()
 
         self.labyrinth = Labyrinth(self.all_sprites, (10, 10))
 
@@ -102,6 +105,8 @@ class Game:
         self.sprite.rect.x = 64 * 5
         self.sprite.rect.y = 64 * 5
         self.all_sprites.add(self.sprite)
+
+        Item(self.all_sprites, self.all_items, (80, 80), lambda: print("portal"), "obj.png")  # тестовый предмет
 
         self.player = Player(self.all_sprites, pygame.math.Vector2(64 * 5, 64 * 5))
 
@@ -127,7 +132,7 @@ class Game:
         elif self.state == GameStates.GAME:
             if not self.paused:
                 self.sprite.update(ticks)
-                self.player.update(self.labyrinth)
+                self.player.update(self.labyrinth, self.all_items)
                 self.camera.move_to(
                     self.player.pos
                     +

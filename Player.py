@@ -16,7 +16,7 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
 
     # labyrinth - объект Labyrinth
-    def update(self, labyrinth):
+    def update(self, labyrinth, items_group):
         # собираем нажатые клавиши для определения вектора движения
         movement = pygame.math.Vector2(0, 0)
         keys = pygame.key.get_pressed()
@@ -94,3 +94,7 @@ class Player(pygame.sprite.Sprite):
 
         self.rect.x = self.pos.x
         self.rect.y = self.pos.y
+
+        items_collide = pygame.sprite.spritecollide(self, items_group, False)
+        for i in items_collide:
+            i.collide()
