@@ -7,6 +7,7 @@ from ImageButton import ImageButton
 from Camera import Camera
 from Player import Player
 from Labyrinth import Labyrinth
+from Monster import Monster
 from Item import Item
 from data_loader import load_image, load_music, load_sound, load_animation
 from Settings import *
@@ -43,6 +44,7 @@ class Game:
         self.camera = Camera(pygame.math.Vector2(64 * 5, 64 * 5))
         self.all_sprites = pygame.sprite.Group()
         self.all_items = pygame.sprite.Group()
+        self.all_monsters = pygame.sprite.Group()
 
         self.paused_text = Text("Пауза", (400, 150), font_size=70)
         self.resume_button = Button("Продолжить", (150, 400), self.resume)
@@ -98,6 +100,7 @@ class Game:
         self.camera = Camera(pygame.math.Vector2(64 * 5, 64 * 5))
         self.all_sprites = pygame.sprite.Group()
         self.all_items = pygame.sprite.Group()
+        self.all_monsters = pygame.sprite.Group()
 
         self.labyrinth = Labyrinth(self.all_sprites, (10, 10))
 
@@ -107,6 +110,9 @@ class Game:
         self.all_sprites.add(self.sprite)
 
         Item(self.all_sprites, self.all_items, (80, 80), lambda: print("portal"), "obj.png")  # тестовый предмет
+        Monster(
+            self.all_sprites, self.all_monsters, (0, 0), lambda: print("collide monster"), "test.png"
+        )  # тестовый монстр
 
         self.player = Player(self.all_sprites, pygame.math.Vector2(64 * 5, 64 * 5))
 
@@ -142,6 +148,8 @@ class Game:
                     )
                 )
                 self.camera.update(ticks)
+                for m in self.all_monsters:
+                    m.update(self.player)
         elif self.state == GameStates.SETTINGS:
             self.sounds_volume_value_text.change_text(str(int(Settings.SOUNDS_VOLUME * 100)) + "%")
             self.music_volume_value_text.change_text(str(int(Settings.MUSIC_VOLUME * 100)) + "%")
