@@ -2,8 +2,8 @@ import pygame
 
 
 class Slider:
-    # x - координата прямоугольника
-    # y - координата прямоугольника
+    # x - координата левого верхнего угла прямоугольника
+    # y - координата левого верхнего угла прямоугольника
     # h - высота прямоугольника
     # w - ширина прямоугольника
     # r - радиус круга
@@ -33,8 +33,11 @@ class Slider:
             pos = pygame.mouse.get_pos()
             x = pos[0]
             y = pos[1]
-            if y in range(self.y + self.h // 2 - self.r, self.y + self.h // 2 + self.r)\
-                    and x in range(self.slider_x - self.r, self.slider_x + self.r):
+            if (
+                self.y + self.h // 2 - self.r < y < self.y + self.h // 2 + self.r
+                and
+                self.slider_x - self.r < x < self.slider_x + self.r
+            ):
                 if x > self.x + self.w:
                     self.slider_x = self.x + self.w
                 elif x < self.x:

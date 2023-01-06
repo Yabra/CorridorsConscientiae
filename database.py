@@ -9,9 +9,8 @@ class Database:
                       (ID integer PRIMARY KEY ,
                        amount_of_points int)''')
 
+    # метод добавления очков в таблицу
     # amount - кол-во очков, полученных за игру
-
-    # добавление очков в таблицу
     def add_points(self, amount):
         self.cur.execute(f'''INSERT INTO points(amount_of_points) VALUES({amount})''')
         self.con.commit()
@@ -31,11 +30,3 @@ class Database:
         st = list(self.cur.execute('''SELECT ID from points'''))
         total = list(map(lambda x: x[0], st))[-1]
         return total
-
-
-
-
-
-
-
-

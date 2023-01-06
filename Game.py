@@ -68,7 +68,9 @@ class Game:
         self.sub_music_volume_button = Button("-", (320, 390), sub_music_volume, font_size=70)
         self.add_music_volume_button = Button("+", (480, 390), add_music_volume, font_size=70)
 
-        self.in_menu_from_settings_button = Button("В меню", (400, 500), lambda: self.make_state_transition(self.in_menu))
+        self.in_menu_from_settings_button = Button(
+            "В меню", (400, 500), lambda: self.make_state_transition(self.in_menu)
+        )
 
         # music load
         load_music("test_music.ogg")
