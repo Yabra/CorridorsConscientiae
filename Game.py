@@ -77,6 +77,7 @@ class Game:
         )
 
         # music load
+        pygame.mixer.music.set_volume(Settings.MUSIC_VOLUME)
         load_music("test_music.ogg")
 
     # метод для начала плавного перехода между состояниями игры
