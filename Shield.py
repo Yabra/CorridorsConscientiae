@@ -4,7 +4,7 @@ from data_loader import load_image
 
 
 class Shield(pygame.sprite.Sprite):
-    max_size = 128
+    max_size = 100
 
     def __init__(self, sprites_group):
         super().__init__(sprites_group)
@@ -16,14 +16,14 @@ class Shield(pygame.sprite.Sprite):
 
     def update(self, ticks, player):
         self.time += ticks
-        if self.time >= 25:
+        if self.time >= 30:
             if pygame.key.get_pressed()[pygame.K_SPACE]:
-                self.size += self.time // 25
+                self.size += self.time // 30
                 if self.size > Shield.max_size:
                     self.size = Shield.max_size
             else:
                 self.size = 0
-            self.time %= 25
+            self.time %= 30
 
         self.rect.x = player.pos.x + player.rect.w // 2 - self.size // 2
         self.rect.y = player.pos.y + player.rect.h // 2 - self.size // 2
