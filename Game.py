@@ -47,6 +47,8 @@ class Game:
         # game
         self.paused = False
         self.level = 0
+        self.score = 0
+        self.lostness = 0
         self.camera = Camera(pygame.math.Vector2(64 * 5, 64 * 5))
         self.all_sprites = pygame.sprite.Group()
         self.all_items = pygame.sprite.Group()
@@ -85,7 +87,7 @@ class Game:
 
         # win
         self.win_text = Text("Вы прошли лабиринт сознания!", (400, 100), font_size=50)
-
+        self.score_text = Text("Очков осознания: ", (400, 250), font_size=40)
         self.in_menu_from_win_button = Button("В меню", (400, 500), lambda: self.make_state_transition(self.in_menu))
 
         # music load
@@ -122,9 +124,20 @@ class Game:
         self.all_sprites.add(self.sprite)
 
         Item(
-            self.all_sprites, self.all_items, (80, 80), lambda: self.make_state_transition(self.next_level), "obj.png"
-        )  # тестовый предмет
-        Monster(self.all_sprites, self.all_monsters, (0, 0), lambda: print("collide monster"))  # тестовый монстр
+            self.all_sprites, self.all_items, (450, 450), lambda: self.make_state_transition(self.next_level), "obj.png"
+        )  # тестовый портал
+
+        Item(
+            self.all_sprites, self.all_items, (350, 450), self.heal_mind, "shield.png"
+        )  # тестовый предмет восстановления разума
+
+        Item(
+            self.all_sprites, self.all_items, (450, 350), self.remove_lostness, "wall.png"
+        )  # тестовый предмет уменьшения потерянности
+
+        Monster(self.all_sprites, self.all_monsters, (0, 0), self.add_lostness)  # тестовый монстр
+        Monster(self.all_sprites, self.all_monsters, (50, 0), self.add_lostness)  # тестовый монстр
+        Monster(self.all_sprites, self.all_monsters, (0, 50), self.add_lostness)  # тестовый монстр
 
         self.player = Player(self.all_sprites, pygame.math.Vector2(64 * 5, 64 * 5))
 
@@ -132,6 +145,8 @@ class Game:
     def start_game(self):
         self.reset_game()
         self.level = 0
+        self.score = 0
+        self.lostness = 0
         # окончание плавного перехода и возвражение кнопкам кликабельности
         StateTransition.from_black(None)
         self.block_buttons = False
@@ -139,10 +154,36 @@ class Game:
     def next_level(self):
         self.reset_game()
         self.level += 1
+        self.score += 100
         if self.level == 7:
             self.state = GameStates.WIN
+            self.score_text.change_text("Очков осознания: " + str(self.score))
         StateTransition.from_black(None)
         self.block_buttons = False
+
+    def previous_level(self):
+        self.reset_game()
+        self.level -= 1
+        self.score -= 100
+        StateTransition.from_black(None)
+        self.block_buttons = False
+
+    def add_lostness(self):
+        self.lostness += 1
+        self.score -= 100
+        if self.lostness == 3:
+            self.previous_level()
+            self.lostness = 0
+
+    def heal_mind(self):
+        self.score += 100
+        self.player.change_mind(Player.max_mind)
+
+    def remove_lostness(self):
+        self.score += 100
+        self.lostness -= 1
+        if self.lostness < 0:
+            self.lostness = 0
 
     # метод перехода в настройки
     def in_settings(self):
@@ -219,6 +260,7 @@ class Game:
 
         elif self.state == GameStates.WIN:
             self.win_text.draw(self.screen)
+            self.score_text.draw(self.screen)
             self.in_menu_from_win_button.draw(self.screen)
 
         # отрисовка плавного перехода
