@@ -18,6 +18,7 @@ class GameStates:
     MENU = 0
     GAME = 1
     SETTINGS = 2
+    WIN = 3
 
 
 # Основной класс игры
@@ -41,11 +42,13 @@ class Game:
 
         # game
         self.paused = False
+        self.level = 0
         self.camera = Camera(pygame.math.Vector2(64 * 5, 64 * 5))
         self.all_sprites = pygame.sprite.Group()
         self.all_items = pygame.sprite.Group()
         self.all_monsters = pygame.sprite.Group()
 
+        self.level_text = Text("", (400, 50), font_size=40)
         self.paused_text = Text("Пауза", (400, 150), font_size=70)
         self.resume_button = Button("Продолжить", (150, 400), self.resume)
         self.in_menu_button = Button("В меню", (150, 480), lambda: self.make_state_transition(self.in_menu))
@@ -76,6 +79,11 @@ class Game:
             "В меню", (400, 500), lambda: self.make_state_transition(self.in_menu)
         )
 
+        # win
+        self.win_text = Text("Вы прошли лабиринт сознания!", (400, 100), font_size=50)
+
+        self.in_menu_from_win_button = Button("В меню", (400, 500), lambda: self.make_state_transition(self.in_menu))
+
         # music load
         pygame.mixer.music.set_volume(Settings.MUSIC_VOLUME)
         load_music("test_music.ogg")
@@ -93,8 +101,7 @@ class Game:
         StateTransition.from_black(None)
         self.block_buttons = False
 
-    # метод для старта игры
-    def start_game(self):
+    def reset_game(self):
         self.state = GameStates.GAME
 
         self.paused = False
@@ -110,12 +117,26 @@ class Game:
         self.sprite.rect.y = 64 * 5
         self.all_sprites.add(self.sprite)
 
-        Item(self.all_sprites, self.all_items, (80, 80), lambda: print("portal"), "obj.png")  # тестовый предмет
+        Item(
+            self.all_sprites, self.all_items, (80, 80), lambda: self.make_state_transition(self.next_level), "obj.png"
+        )  # тестовый предмет
         Monster(self.all_sprites, self.all_monsters, (0, 0), lambda: print("collide monster"))  # тестовый монстр
 
         self.player = Player(self.all_sprites, pygame.math.Vector2(64 * 5, 64 * 5))
 
+    # метод для старта игры
+    def start_game(self):
+        self.reset_game()
+        self.level = 0
         # окончание плавного перехода и возвражение кнопкам кликабельности
+        StateTransition.from_black(None)
+        self.block_buttons = False
+
+    def next_level(self):
+        self.reset_game()
+        self.level += 1
+        if self.level == 7:
+            self.state = GameStates.WIN
         StateTransition.from_black(None)
         self.block_buttons = False
 
@@ -135,6 +156,7 @@ class Game:
         if self.state == GameStates.MENU:
             pass
         elif self.state == GameStates.GAME:
+            self.level_text.change_text("Уровень " + str(self.level + 1))
             if not self.paused:
                 self.sprite.update(ticks)
                 self.player.update(ticks, self.labyrinth, self.all_items)
@@ -168,6 +190,7 @@ class Game:
         elif self.state == GameStates.GAME:
             self.camera.draw(self.screen, self.all_sprites)
 
+            self.level_text.draw(self.screen)
             if self.paused:
                 self.paused_text.draw(self.screen)
                 self.resume_button.draw(self.screen)
@@ -187,6 +210,10 @@ class Game:
             self.add_music_volume_button.draw(self.screen)
 
             self.in_menu_from_settings_button.draw(self.screen)
+
+        elif self.state == GameStates.WIN:
+            self.win_text.draw(self.screen)
+            self.in_menu_from_win_button.draw(self.screen)
 
         # отрисовка плавного перехода
         StateTransition.draw(self.screen)
@@ -224,6 +251,10 @@ class Game:
                             self.sub_music_volume_button.check_click(event.pos)
                             self.add_music_volume_button.check_click(event.pos)
                             self.in_menu_from_settings_button.check_click(event.pos)
+                elif self.state == GameStates.WIN:
+                    if event.type == pygame.MOUSEBUTTONUP:
+                        if event.button == 1 and not self.block_buttons:
+                            self.in_menu_from_win_button.check_click(event.pos)
 
             ticks = self.clock.tick(60)
 
