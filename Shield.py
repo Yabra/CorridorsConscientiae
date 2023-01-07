@@ -17,8 +17,11 @@ class Shield(pygame.sprite.Sprite):
     def update(self, ticks, player):
         self.time += ticks
         if self.time >= 30:
-            if pygame.key.get_pressed()[pygame.K_SPACE]:
+            if player.mind <= 0:
+                self.size = 0
+            elif pygame.key.get_pressed()[pygame.K_SPACE]:
                 self.size += self.time // 30
+                player.change_mind(-1 * (self.time // 30))
                 if self.size > Shield.max_size:
                     self.size = Shield.max_size
             else:

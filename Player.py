@@ -7,6 +7,7 @@ from data_loader import load_image
 
 class Player(pygame.sprite.Sprite):
     speed = 3
+    max_mind = 500
 
     # sprites_group - группа всех спрайтов для отрисовки камерой
     # pos           - изначальная позиция игрока (pygame.math.Vector2)
@@ -17,9 +18,11 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.mask = pygame.mask.from_surface(self.image)
         self.shield = Shield(sprites_group)
+        self.mind = Player.max_mind
 
     # labyrinth - объект Labyrinth
     def update(self, ticks, labyrinth, items_group):
+        print(self.mind)
         self.shield.update(ticks, self)
         # собираем нажатые клавиши для определения вектора движения
         movement = pygame.math.Vector2(0, 0)
@@ -32,7 +35,7 @@ class Player(pygame.sprite.Sprite):
             movement.y -= 1
         if keys[pygame.K_DOWN]:
             movement.y += 1
-        if keys[pygame.K_SPACE]:
+        if keys[pygame.K_SPACE] and self.mind > 0:  # блокируем передвижение игрока при использовании щита
             movement = pygame.math.Vector2(0, 0)
 
         if movement.length() > 0:
@@ -104,3 +107,10 @@ class Player(pygame.sprite.Sprite):
         items_collide = pygame.sprite.spritecollide(self, items_group, False)
         for i in items_collide:
             i.collide()
+
+    def change_mind(self, value):
+        self.mind += value
+        if self.mind < 0:
+            self.mind = 0
+        elif self.mind > Player.max_mind:
+            self.mind = Player.max_mind
