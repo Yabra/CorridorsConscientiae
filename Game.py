@@ -111,9 +111,7 @@ class Game:
         self.all_sprites.add(self.sprite)
 
         Item(self.all_sprites, self.all_items, (80, 80), lambda: print("portal"), "obj.png")  # тестовый предмет
-        Monster(
-            self.all_sprites, self.all_monsters, (0, 0), lambda: print("collide monster"), "test.png"
-        )  # тестовый монстр
+        Monster(self.all_sprites, self.all_monsters, (0, 0), lambda: print("collide monster"))  # тестовый монстр
 
         self.player = Player(self.all_sprites, pygame.math.Vector2(64 * 5, 64 * 5))
 
@@ -139,7 +137,7 @@ class Game:
         elif self.state == GameStates.GAME:
             if not self.paused:
                 self.sprite.update(ticks)
-                self.player.update(self.labyrinth, self.all_items)
+                self.player.update(ticks, self.labyrinth, self.all_items)
                 self.camera.move_to(
                     self.player.pos
                     +

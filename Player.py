@@ -1,5 +1,6 @@
 import pygame
 from Tile import TileType
+from Shield import Shield
 
 from data_loader import load_image
 
@@ -14,9 +15,11 @@ class Player(pygame.sprite.Sprite):
         self.pos = pos
         self.image = load_image("test.png")
         self.rect = self.image.get_rect()
+        self.shield = Shield(sprites_group)
 
     # labyrinth - объект Labyrinth
-    def update(self, labyrinth, items_group):
+    def update(self, ticks, labyrinth, items_group):
+        self.shield.update(ticks, self)
         # собираем нажатые клавиши для определения вектора движения
         movement = pygame.math.Vector2(0, 0)
         keys = pygame.key.get_pressed()
@@ -28,6 +31,8 @@ class Player(pygame.sprite.Sprite):
             movement.y -= 1
         if keys[pygame.K_DOWN]:
             movement.y += 1
+        if keys[pygame.K_SPACE]:
+            movement = pygame.math.Vector2(0, 0)
 
         if movement.length() > 0:
             movement = movement.normalize()  # нормализуем вектор для одинаковой скорости во всех напоравлениях

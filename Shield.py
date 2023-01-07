@@ -1,0 +1,33 @@
+import pygame
+
+from data_loader import load_image
+
+
+class Shield(pygame.sprite.Sprite):
+    max_size = 128
+
+    def __init__(self, sprites_group):
+        super().__init__(sprites_group)
+        self.size = 0
+        self.image = pygame.Surface((0, 0))
+        self.rect = self.image.get_rect()
+        self.time = 0
+        self.mask = pygame.mask.from_surface(self.image)
+
+    def update(self, ticks, player):
+        self.time += ticks
+        if self.time >= 25:
+            if pygame.key.get_pressed()[pygame.K_SPACE]:
+                self.size += self.time // 25
+                if self.size > Shield.max_size:
+                    self.size = Shield.max_size
+            else:
+                self.size = 0
+            self.time %= 25
+
+        self.rect.x = player.pos.x + player.rect.w // 2 - self.size // 2
+        self.rect.y = player.pos.y + player.rect.h // 2 - self.size // 2
+        self.rect.w = self.size
+        self.rect.h = self.size
+        self.image = pygame.transform.scale(load_image("shield.png"), (self.size, self.size))
+        self.mask = pygame.mask.from_surface(self.image)
