@@ -22,7 +22,7 @@ class Monster(pygame.sprite.Sprite):
             self.monsters_group.remove(self)
             return
 
-        if pygame.sprite.collide_rect(self, player):
+        if pygame.sprite.collide_mask(self, player):
             self.collision_func()
             self.sprites_group.remove(self)
             self.monsters_group.remove(self)

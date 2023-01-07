@@ -15,6 +15,7 @@ class Player(pygame.sprite.Sprite):
         self.pos = pos
         self.image = load_image("test.png")
         self.rect = self.image.get_rect()
+        self.mask = pygame.mask.from_surface(self.image)
         self.shield = Shield(sprites_group)
 
     # labyrinth - объект Labyrinth
