@@ -27,29 +27,12 @@ def load_settings():
         save_settings()
 
 
-def add_sounds_volume():
-    Settings.SOUNDS_VOLUME += 0.1
-    if Settings.SOUNDS_VOLUME > 1:
-        Settings.SOUNDS_VOLUME = 1
+def set_sounds_volume(value):
+    Settings.SOUNDS_VOLUME = value / 100
 
 
-def sub_sounds_volume():
-    Settings.SOUNDS_VOLUME -= 0.1
-    if Settings.SOUNDS_VOLUME < 0:
-        Settings.SOUNDS_VOLUME = 0
-
-
-def add_music_volume():
-    Settings.MUSIC_VOLUME += 0.1
-    if Settings.MUSIC_VOLUME > 1:
-        Settings.MUSIC_VOLUME = 1
-    pygame.mixer.music.set_volume(Settings.MUSIC_VOLUME)
-
-
-def sub_music_volume():
-    Settings.MUSIC_VOLUME -= 0.1
-    if Settings.MUSIC_VOLUME < 0:
-        Settings.MUSIC_VOLUME = 0
+def set_music_volume(value):
+    Settings.MUSIC_VOLUME = value / 100
     pygame.mixer.music.set_volume(Settings.MUSIC_VOLUME)
 
 

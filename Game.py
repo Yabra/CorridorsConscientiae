@@ -1,8 +1,12 @@
 import sys
 
+import pygame
+
+import Settings
 from AnimatedSprite import AnimatedSprite
 from Text import Text
 from Button import Button
+from Slider import Slider
 from ImageButton import ImageButton
 from Camera import Camera
 from Player import Player
@@ -65,18 +69,18 @@ class Game:
         # settings
         self.settings_text = Text("Настройки", (400, 100), font_size=70)
 
-        self.sounds_volume_text = Text("Громкость звуков", (400, 250), font_size=30)
-        self.sounds_volume_value_text = Text("", (400, 300), font_size=50)
-        self.sub_sounds_volume_button = Button("-", (320, 290), sub_sounds_volume, font_size=70)
-        self.add_sounds_volume_button = Button("+", (480, 290), add_sounds_volume, font_size=70)
+        self.sounds_volume_text = Text("Громкость звуков", (150, 200), font_size=30)
+        self.sounds_volume_value_text = Text("", (150, 240), font_size=40)
+        self.sounds_slider = Slider(50, 265, 18, 200, 10, pygame.Color("white"), pygame.Color(0, 0, 150), self.screen)
+        self.sounds_slider.set_value(int(Settings.SOUNDS_VOLUME * 100))
 
-        self.music_volume_text = Text("Громкость музыки", (400, 350), font_size=30)
-        self.music_volume_value_text = Text("", (400, 400), font_size=50)
-        self.sub_music_volume_button = Button("-", (320, 390), sub_music_volume, font_size=70)
-        self.add_music_volume_button = Button("+", (480, 390), add_music_volume, font_size=70)
+        self.music_volume_text = Text("Громкость музыки", (150, 320), font_size=30)
+        self.music_volume_value_text = Text("", (150, 360), font_size=40)
+        self.music_slider = Slider(50, 385, 18, 200, 10, pygame.Color("white"), pygame.Color(0, 0, 150), self.screen)
+        self.music_slider.set_value(int(Settings.MUSIC_VOLUME * 100))
 
         self.in_menu_from_settings_button = Button(
-            "В меню", (400, 500), lambda: self.make_state_transition(self.in_menu)
+            "В меню", (150, 500), lambda: self.make_state_transition(self.in_menu)
         )
 
         # win
@@ -172,6 +176,10 @@ class Game:
                 for m in self.all_monsters:
                     m.update(self.player)
         elif self.state == GameStates.SETTINGS:
+            self.sounds_slider.check()
+            self.music_slider.check()
+            set_sounds_volume(self.sounds_slider.value())
+            set_music_volume(self.music_slider.value())
             self.sounds_volume_value_text.change_text(str(int(Settings.SOUNDS_VOLUME * 100)) + "%")
             self.music_volume_value_text.change_text(str(int(Settings.MUSIC_VOLUME * 100)) + "%")
 
@@ -201,13 +209,11 @@ class Game:
 
             self.sounds_volume_text.draw(self.screen)
             self.sounds_volume_value_text.draw(self.screen)
-            self.sub_sounds_volume_button.draw(self.screen)
-            self.add_sounds_volume_button.draw(self.screen)
+            self.sounds_slider.draw_slider()
 
             self.music_volume_text.draw(self.screen)
             self.music_volume_value_text.draw(self.screen)
-            self.sub_music_volume_button.draw(self.screen)
-            self.add_music_volume_button.draw(self.screen)
+            self.music_slider.draw_slider()
 
             self.in_menu_from_settings_button.draw(self.screen)
 
@@ -233,6 +239,7 @@ class Game:
                             self.start_button.check_click(event.pos)
                             self.settings_button.check_click(event.pos)
                             self.exit_button.check_click(event.pos)
+
                 elif self.state == GameStates.GAME:
                     if event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_ESCAPE:
@@ -243,14 +250,12 @@ class Game:
                             if self.paused:
                                 self.resume_button.check_click(event.pos)
                                 self.in_menu_button.check_click(event.pos)
+
                 elif self.state == GameStates.SETTINGS:
                     if event.type == pygame.MOUSEBUTTONUP:
                         if event.button == 1 and not self.block_buttons:
-                            self.sub_sounds_volume_button.check_click(event.pos)
-                            self.add_sounds_volume_button.check_click(event.pos)
-                            self.sub_music_volume_button.check_click(event.pos)
-                            self.add_music_volume_button.check_click(event.pos)
                             self.in_menu_from_settings_button.check_click(event.pos)
+
                 elif self.state == GameStates.WIN:
                     if event.type == pygame.MOUSEBUTTONUP:
                         if event.button == 1 and not self.block_buttons:

@@ -22,6 +22,9 @@ class Slider:
         pygame.draw.rect(self.screen, self.rect_color, (self.x, self.y,  self.w, self.h))
         pygame.draw.circle(self.screen, self.circle_color, (self.slider_x, self.y + self.h // 2), self.r)
 
+    def set_value(self, value):
+        self.slider_x = self.x + self.w / 100 * value
+
     # возвращает значение в %
     def value(self):
         return int((self.slider_x - self.x) / self.w * 100)
