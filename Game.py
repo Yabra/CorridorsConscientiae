@@ -18,6 +18,7 @@ from data_loader import load_image, load_music, load_sound, load_animation
 from Settings import *
 from StateTransition import StateTransition
 from database import *
+from labyrinth_generator import create_maze
 
 
 class GameStates:
@@ -52,27 +53,22 @@ class Game:
         self.level = 0
         self.score = 0
         self.lostness = 0
-        self.camera = Camera(pygame.math.Vector2(64 * 5, 64 * 5))
+        
         self.all_sprites = pygame.sprite.Group()
         self.all_items = pygame.sprite.Group()
         self.all_monsters = pygame.sprite.Group()
 
-        self.mind_bar = Scale(50, 50, 30, 200, Player.max_mind, Player.max_mind, False, pygame.Color("gray"), pygame.Color("yellow"), self.screen)
-        self.lostness_bar = Scale(550, 50, 30, 200, 3, 0, True, pygame.Color("gray"), pygame.Color(255, 0, 255), self.screen)
+        self.mind_bar = Scale(50, 50, 30, 200, Player.max_mind, Player.max_mind, True, pygame.Color("gray"), pygame.Color("yellow"), self.screen)
+        self.lostness_bar = Scale(550, 50, 30, 200, 3, 0, False, pygame.Color("gray"), pygame.Color(255, 0, 255), self.screen)
 
         self.level_text = Text("", (400, 50), font_size=40)
         self.paused_text = Text("Пауза", (400, 150), font_size=70)
         self.resume_button = Button("Продолжить", (150, 400), self.resume)
         self.in_menu_button = Button("В меню", (150, 480), lambda: self.make_state_transition(self.in_menu))
 
-        self.labyrinth = Labyrinth(self.all_sprites, (10, 10))
-
-        self.sprite = AnimatedSprite(load_animation("test", 5, 5))  # помещаем анимированный спрайт на локацию
-        self.sprite.rect.x = 64 * 5
-        self.sprite.rect.y = 64 * 5
-        self.all_sprites.add(self.sprite)
-
-        self.player = Player(self.all_sprites, pygame.math.Vector2(64 * 5, 64 * 5))
+        self.camera = None
+        self.labyrinth = None
+        self.player = None
 
         # settings
         self.settings_text = Text("Настройки", (400, 100), font_size=70)
@@ -117,35 +113,22 @@ class Game:
         self.state = GameStates.GAME
 
         self.paused = False
-        self.camera = Camera(pygame.math.Vector2(64 * 5, 64 * 5))
         self.all_sprites = pygame.sprite.Group()
         self.all_items = pygame.sprite.Group()
         self.all_monsters = pygame.sprite.Group()
 
-        self.labyrinth = Labyrinth(self.all_sprites, (10, 10))
-
-        self.sprite = AnimatedSprite(load_animation("test", 5, 5))  # помещаем анимированный спрайт на локацию
-        self.sprite.rect.x = 64 * 5
-        self.sprite.rect.y = 64 * 5
-        self.all_sprites.add(self.sprite)
-
-        Item(
-            self.all_sprites, self.all_items, (450, 450), lambda: self.make_state_transition(self.next_level), "obj.png"
-        )  # тестовый портал
-
-        Item(
-            self.all_sprites, self.all_items, (350, 450), self.heal_mind, "shield.png"
-        )  # тестовый предмет восстановления разума
-
-        Item(
-            self.all_sprites, self.all_items, (450, 350), self.remove_lostness, "wall.png"
-        )  # тестовый предмет уменьшения потерянности
-
-        Monster(self.all_sprites, self.all_monsters, (0, 0), self.add_lostness)  # тестовый монстр
-        Monster(self.all_sprites, self.all_monsters, (50, 0), self.add_lostness)  # тестовый монстр
-        Monster(self.all_sprites, self.all_monsters, (0, 50), self.add_lostness)  # тестовый монстр
-
-        self.player = Player(self.all_sprites, pygame.math.Vector2(64 * 5, 64 * 5))
+        self.labyrinth = Labyrinth(
+            self,
+            self.all_sprites,
+            self.all_items,
+            self.all_monsters,
+            create_maze(
+                15 + 5 * self.level,
+                15 + 5 * self.level,
+                0 + 5 * self.level,
+                0 + 3 * self.level
+            )
+        )
 
     # метод для старта игры
     def start_game(self):
@@ -210,7 +193,6 @@ class Game:
         elif self.state == GameStates.GAME:
             self.level_text.change_text("Уровень " + str(self.level + 1))
             if not self.paused:
-                self.sprite.update(ticks)
                 self.player.update(ticks, self.labyrinth, self.all_items)
                 self.camera.move_to(
                     self.player.pos

@@ -22,7 +22,6 @@ class Player(pygame.sprite.Sprite):
 
     # labyrinth - объект Labyrinth
     def update(self, ticks, labyrinth, items_group):
-        print(self.mind)
         self.shield.update(ticks, self)
         # собираем нажатые клавиши для определения вектора движения
         movement = pygame.math.Vector2(0, 0)
