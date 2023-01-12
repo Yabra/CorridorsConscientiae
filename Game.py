@@ -1,7 +1,5 @@
 import sys
 
-import pygame
-
 import Settings
 from AnimatedSprite import AnimatedSprite
 from Text import Text
@@ -9,11 +7,8 @@ from Button import Button
 from Slider import Slider
 from Scale import Scale
 from ImageButton import ImageButton
-from Camera import Camera
 from Player import Player
 from Labyrinth import Labyrinth
-from Monster import Monster
-from Item import Item
 from data_loader import load_image, load_music, load_sound, load_animation
 from Settings import *
 from StateTransition import StateTransition
@@ -58,8 +53,19 @@ class Game:
         self.all_items = pygame.sprite.Group()
         self.all_monsters = pygame.sprite.Group()
 
-        self.mind_bar = Scale(50, 50, 30, 200, Player.max_mind, Player.max_mind, True, pygame.Color("gray"), pygame.Color("yellow"), self.screen)
-        self.lostness_bar = Scale(550, 50, 30, 200, 3, 0, False, pygame.Color("gray"), pygame.Color(255, 0, 255), self.screen)
+        self.mind_bar = Scale(
+            50, 50, 30, 200,
+            Player.max_mind, Player.max_mind,
+            True, pygame.Color("gray"), pygame.Color("yellow"),
+            self.screen
+        )
+
+        self.lostness_bar = Scale(
+            550, 50, 30, 200,
+            3, 0,
+            False, pygame.Color("gray"), pygame.Color(255, 0, 255),
+            self.screen
+        )
 
         self.level_text = Text("", (400, 50), font_size=40)
         self.paused_text = Text("Пауза", (400, 150), font_size=70)
