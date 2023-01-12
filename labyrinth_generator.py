@@ -1,11 +1,6 @@
 import random
 
 
-wall = 'w'
-cell = 'c'
-unvisited = 'u'
-
-
 def surroundingCells(rand_wall, maze):
     s_cells = 0
     if maze[rand_wall[0] - 1][rand_wall[1]] == 'c':
@@ -20,7 +15,12 @@ def surroundingCells(rand_wall, maze):
     return s_cells
 
 
-def create_maze(width, height):
+wall = 'w'
+cell = 'c'
+unvisited = 'u'
+
+
+def create_maze(width, height, crystal_amount, monster_amount):
     maze = []
     for i in range(0, height):
         line = []
@@ -198,15 +198,33 @@ def create_maze(width, height):
             if maze[i][j] == 'u':
                 maze[i][j] = 'w'
 
+
+    # Добавляем кристаллы и монстров
+    # m - монстр
+    # k - кристалл
+    while monster_amount:
+        x, y = int(random.random() * width), int(random.random() * width)
+        if 0 < x < width - 1 and 0 < y < width - 1:
+            if maze[x][y] == 'c':
+                maze[x][y] = 'm'
+                monster_amount -= 1
+    while crystal_amount:
+        x, y = int(random.random() * width), int(random.random() * width)
+        if 0 < x < width - 1 and 0 < y < width - 1:
+            if maze[x][y] == 'c':
+                maze[x][y] = 'k'
+                crystal_amount -= 1
+
     # Добавляем вход и выход
-    for i in range(0, width):
-        if maze[1][i] == 'c':
-            maze[0][i] = 'c'
+    # t - телепорт
+    # e - вход
+    for i in range(width):
+        if maze[2][i] == 'c':
+            maze[1][i] = 't'
+            break
+    for i in range(width):
+        if maze[-3][i] == 'c':
+            maze[-2][i] = 'e'
             break
 
-    for i in range(width - 1, 0, -1):
-        if maze[height - 2][i] == 'c':
-            maze[height - 1][i] = 'c'
-            break
     return maze
-
