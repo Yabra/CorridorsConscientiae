@@ -3,7 +3,7 @@ import sqlite3
 
 class Database:
     def __init__(self):
-        self.con = sqlite3.connect('points.db')
+        self.con = sqlite3.connect('data/points.db')
         self.cur = self.con.cursor()
         self.cur.execute('''CREATE TABLE IF NOT EXISTS points
                       (ID integer PRIMARY KEY ,

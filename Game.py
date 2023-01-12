@@ -7,6 +7,7 @@ from AnimatedSprite import AnimatedSprite
 from Text import Text
 from Button import Button
 from Slider import Slider
+from Scale import Scale
 from ImageButton import ImageButton
 from Camera import Camera
 from Player import Player
@@ -16,6 +17,7 @@ from Item import Item
 from data_loader import load_image, load_music, load_sound, load_animation
 from Settings import *
 from StateTransition import StateTransition
+from database import *
 
 
 class GameStates:
@@ -35,6 +37,7 @@ class Game:
         self.screen = pygame.display.set_mode((800, 600))
         pygame.display.set_icon(load_image("test.png"))
 
+        self.db = Database()
         self.clock = pygame.time.Clock()
         self.block_buttons = False  # переменная для блокировки нажатия кнопок
 
@@ -53,6 +56,9 @@ class Game:
         self.all_sprites = pygame.sprite.Group()
         self.all_items = pygame.sprite.Group()
         self.all_monsters = pygame.sprite.Group()
+
+        self.mind_bar = Scale(50, 50, 30, 200, Player.max_mind, Player.max_mind, False, pygame.Color("gray"), pygame.Color("yellow"), self.screen)
+        self.lostness_bar = Scale(550, 50, 30, 200, 3, 0, True, pygame.Color("gray"), pygame.Color(255, 0, 255), self.screen)
 
         self.level_text = Text("", (400, 50), font_size=40)
         self.paused_text = Text("Пауза", (400, 150), font_size=70)
@@ -158,6 +164,7 @@ class Game:
         if self.level == 7:
             self.state = GameStates.WIN
             self.score_text.change_text("Очков осознания: " + str(self.score))
+            self.db.add_points(self.score)
         StateTransition.from_black(None)
         self.block_buttons = False
 
@@ -216,6 +223,8 @@ class Game:
                 self.camera.update(ticks)
                 for m in self.all_monsters:
                     m.update(self.player)
+            self.mind_bar.value = self.player.mind
+            self.lostness_bar.value = self.lostness
         elif self.state == GameStates.SETTINGS:
             self.sounds_slider.check()
             self.music_slider.check()
@@ -240,6 +249,9 @@ class Game:
             self.camera.draw(self.screen, self.all_sprites)
 
             self.level_text.draw(self.screen)
+
+            self.mind_bar.draw_scale()
+            self.lostness_bar.draw_scale()
             if self.paused:
                 self.paused_text.draw(self.screen)
                 self.resume_button.draw(self.screen)
