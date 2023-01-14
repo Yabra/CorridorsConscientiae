@@ -218,13 +218,20 @@ def create_maze(width, height, crystal_amount, monster_amount):
     # Добавляем вход и выход
     # t - телепорт
     # e - вход
-    for i in range(width):
-        if maze[2][i] == 'c':
-            maze[1][i] = 't'
-            break
-    for i in range(width):
-        if maze[-3][i] == 'c':
-            maze[-2][i] = 'e'
-            break
+    t = 1
+    e = 1
+    while e:
+        x = int(random.random() * width)
+        if 0 < x < width - 1:
+            if maze[-3][x] == 'c':
+                maze[-2][x] = 'e'
+                e -= 1
+
+    while t:
+        x = int(random.random() * width)
+        if 0 < x < width - 1:
+            if maze[2][x] == 'c':
+                maze[1][x] = 't'
+                t -= 1
 
     return maze
