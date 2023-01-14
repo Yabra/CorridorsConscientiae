@@ -1,7 +1,7 @@
 import random
 
 
-def surroundingCells(rand_wall, maze):
+def surrounding_cells(rand_wall, maze):
     s_cells = 0
     if maze[rand_wall[0] - 1][rand_wall[1]] == 'c':
         s_cells += 1
@@ -42,11 +42,8 @@ def create_maze(width, height, crystal_amount, monster_amount):
 
     # Обозначаем стартовую клетку и делаем клетки вокруг нее стенами
     maze[starting_height][starting_width] = cell
-    walls = []
-    walls.append([starting_height - 1, starting_width])
-    walls.append([starting_height, starting_width - 1])
-    walls.append([starting_height, starting_width + 1])
-    walls.append([starting_height + 1, starting_width])
+    walls = [[starting_height - 1, starting_width], [starting_height, starting_width - 1],
+             [starting_height, starting_width + 1], [starting_height + 1, starting_width]]
 
     # Добавляем стены в maze
     maze[starting_height - 1][starting_width] = 'w'
@@ -61,7 +58,7 @@ def create_maze(width, height, crystal_amount, monster_amount):
         if rand_wall[1] != 0:
             if maze[rand_wall[0]][rand_wall[1] - 1] == 'u' and maze[rand_wall[0]][rand_wall[1] + 1] == 'c':
                 # Находим число соседних клеток
-                s_cells = surroundingCells(rand_wall, maze)
+                s_cells = surrounding_cells(rand_wall, maze)
 
                 if s_cells < 3:
                     maze[rand_wall[0]][rand_wall[1]] = 'c'
@@ -95,7 +92,7 @@ def create_maze(width, height, crystal_amount, monster_amount):
         if rand_wall[0] != 0:
             if maze[rand_wall[0] - 1][rand_wall[1]] == 'u' and maze[rand_wall[0] + 1][rand_wall[1]] == 'c':
 
-                s_cells = surroundingCells(rand_wall, maze)
+                s_cells = surrounding_cells(rand_wall, maze)
                 if s_cells < 2:
                     maze[rand_wall[0]][rand_wall[1]] = 'c'
 
@@ -128,7 +125,7 @@ def create_maze(width, height, crystal_amount, monster_amount):
         if rand_wall[0] != height - 1:
             if maze[rand_wall[0] + 1][rand_wall[1]] == 'u' and maze[rand_wall[0] - 1][rand_wall[1]] == 'c':
 
-                s_cells = surroundingCells(rand_wall, maze)
+                s_cells = surrounding_cells(rand_wall, maze)
                 if s_cells < 2:
                     maze[rand_wall[0]][rand_wall[1]] = 'c'
 
@@ -160,7 +157,7 @@ def create_maze(width, height, crystal_amount, monster_amount):
         if rand_wall[1] != width - 1:
             if maze[rand_wall[0]][rand_wall[1] + 1] == 'u' and maze[rand_wall[0]][rand_wall[1] - 1] == 'c':
 
-                s_cells = surroundingCells(rand_wall, maze)
+                s_cells = surrounding_cells(rand_wall, maze)
                 if s_cells < 2:
                     maze[rand_wall[0]][rand_wall[1]] = 'c'
 
@@ -197,7 +194,6 @@ def create_maze(width, height, crystal_amount, monster_amount):
         for j in range(0, width):
             if maze[i][j] == 'u':
                 maze[i][j] = 'w'
-
 
     # Добавляем кристаллы и монстров
     # m - монстр
