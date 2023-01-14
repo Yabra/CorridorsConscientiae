@@ -16,7 +16,7 @@ class Player(AnimatedSprite):
         self.idle_anim = load_animation("player_idle", 1, 8)
         self.run_anim = load_animation("player_run", 4, 8)
 
-        super().__init__(sprites_group, self.idle_anim)
+        super().__init__(self.idle_anim, sprites_group)
         self.pos = pos
         self.mask = pygame.mask.from_surface(self.image)
         self.shield = Shield(sprites_group)

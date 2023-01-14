@@ -7,7 +7,7 @@ class Text:
     # pos        - кортеж с 2 координатами центра текста
     # color      - цвет текста
     # font_size  - размер отображаемого текста
-    def __init__(self, text, pos, color=(0, 0, 200), font_size=50):
+    def __init__(self, text, pos, color=(150, 0, 0), font_size=50):
         self.text = text
         self.color = color
         self.font_size = font_size

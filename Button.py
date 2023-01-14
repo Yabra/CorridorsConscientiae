@@ -9,7 +9,7 @@ class Button:
     # click_func - функция, вызывающаяся при нажатии на кнопку
     # color      - цвет текста
     # font_size  - размер отображаемого текста
-    def __init__(self, text, pos, click_func, color=(0, 0, 200), font_size=50):
+    def __init__(self, text, pos, click_func, color=(150, 0, 0), font_size=50):
         self.text = text
         self.click_func = click_func
         self.color = color

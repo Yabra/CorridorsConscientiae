@@ -63,7 +63,7 @@ class Game:
         self.lostness_bar = Scale(
             550, 50, 30, 200,
             3, 0,
-            False, pygame.Color("gray"), pygame.Color(255, 0, 255),
+            False, pygame.Color("gray"), pygame.Color(150, 0, 150),
             self.screen
         )
 
@@ -131,8 +131,8 @@ class Game:
             create_maze(
                 15 + 5 * self.level,
                 15 + 5 * self.level,
-                0 + 5 * self.level,
-                0 + 3 * self.level
+                5 * self.level,
+                3 * self.level
             )
         )
 
@@ -147,9 +147,9 @@ class Game:
         self.block_buttons = False
 
     def next_level(self):
-        self.reset_game()
         self.level += 1
         self.score += 100
+        self.reset_game()
         if self.level == 7:
             self.state = GameStates.WIN
             self.score_text.change_text("Очков осознания: " + str(self.score))
@@ -210,7 +210,7 @@ class Game:
                 )
                 self.camera.update(ticks)
                 for m in self.all_monsters:
-                    m.update(self.player)
+                    m.update(ticks, self.player)
             self.mind_bar.value = self.player.mind
             self.lostness_bar.value = self.lostness
         elif self.state == GameStates.SETTINGS:

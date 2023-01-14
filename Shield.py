@@ -4,7 +4,7 @@ from data_loader import load_image
 
 
 class Shield(pygame.sprite.Sprite):
-    max_size = 100
+    max_size = 90
 
     def __init__(self, sprites_group):
         super().__init__(sprites_group)
