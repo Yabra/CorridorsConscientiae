@@ -74,12 +74,16 @@ class Labyrinth:
                         items_group,
                         ((x * 2 + 0.5) * tile_size, (y * 2 + 0.5) * tile_size),
                         lambda: game.make_state_transition(game.next_level),
-                        "obj.png"
+                        "portal.png"
                     )
 
                 elif maze[y][x] == "e":
+                    mind = Player.max_mind
+                    if game.player:
+                        mind = game.player.mind
                     game.player = Player(
                         sprites_group,
-                        pygame.math.Vector2((x * 2 + 0.5) * tile_size, (y * 2 + 0.5) * tile_size)
+                        pygame.math.Vector2((x * 2 + 0.5) * tile_size, (y * 2 + 0.5) * tile_size),
+                        mind
                     )
                     game.camera = Camera(pygame.math.Vector2((x * 2 + 0.5) * tile_size, (y * 2 + 0.5) * tile_size))

@@ -12,7 +12,7 @@ class Player(AnimatedSprite):
 
     # sprites_group - группа всех спрайтов для отрисовки камерой
     # pos           - изначальная позиция игрока (pygame.math.Vector2)
-    def __init__(self, sprites_group, pos):
+    def __init__(self, sprites_group, pos, mind):
         self.idle_anim = load_animation("player_idle", 1, 8)
         self.run_anim = load_animation("player_run", 4, 8)
 
@@ -20,7 +20,7 @@ class Player(AnimatedSprite):
         self.pos = pos
         self.mask = pygame.mask.from_surface(self.image)
         self.shield = Shield(sprites_group)
-        self.mind = Player.max_mind
+        self.mind = mind
         self.is_left = False
         self.time = 0
 
