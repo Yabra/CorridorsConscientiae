@@ -131,8 +131,8 @@ class Game:
             create_maze(
                 15 + 5 * self.level,
                 15 + 5 * self.level,
-                5 * self.level,
-                3 * self.level
+                3 * self.level,
+                6 * self.level
             )
         )
 
@@ -158,9 +158,9 @@ class Game:
         self.block_buttons = False
 
     def previous_level(self):
-        self.reset_game()
         self.level -= 1
         self.score -= 100
+        self.reset_game()
         StateTransition.from_black(None)
         self.block_buttons = False
 

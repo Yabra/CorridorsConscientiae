@@ -55,7 +55,7 @@ class Labyrinth:
                         Item(
                             sprites_group,
                             items_group,
-                            ((x * 2 + 0.5) * tile_size, (y * 2 + random.choice([0, 0.5, 1.25, 1.75])) * tile_size),
+                            ((x * 2 + 0.5) * tile_size, (y * 2 + random.choice([0, 0.5, 1.25, 1.5])) * tile_size),
                             game.heal_mind, "crystal0.png"
                         )  # кристалл восстановления разума
 
@@ -63,7 +63,7 @@ class Labyrinth:
                         Item(
                             sprites_group,
                             items_group,
-                            ((x * 2 + 0.5) * tile_size, (y * 2 + random.choice([0, 0.5, 1.25, 1.75])) * tile_size),
+                            ((x * 2 + 0.5) * tile_size, (y * 2 + random.choice([0, 0.5, 1.25, 1.5])) * tile_size),
                             game.remove_lostness,
                             "crystal1.png"
                         )  # кристалл уменьшения потерянности
