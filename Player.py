@@ -1,24 +1,27 @@
 import pygame
 from Tile import TileType
 from Shield import Shield
+from AnimatedSprite import AnimatedSprite
 
-from data_loader import load_image
+from data_loader import load_animation
 
 
-class Player(pygame.sprite.Sprite):
+class Player(AnimatedSprite):
     speed = 3
     max_mind = 500
 
     # sprites_group - группа всех спрайтов для отрисовки камерой
     # pos           - изначальная позиция игрока (pygame.math.Vector2)
     def __init__(self, sprites_group, pos):
-        super().__init__(sprites_group)
+        self.idle_anim = load_animation("player_idle", 1, 8)
+        self.run_anim = load_animation("player_run", 4, 8)
+
+        super().__init__(sprites_group, self.idle_anim)
         self.pos = pos
-        self.image = load_image("test.png")
-        self.rect = self.image.get_rect()
         self.mask = pygame.mask.from_surface(self.image)
         self.shield = Shield(sprites_group)
         self.mind = Player.max_mind
+        self.is_left = False
 
     # labyrinth - объект Labyrinth
     def update(self, ticks, labyrinth, items_group):
@@ -38,6 +41,8 @@ class Player(pygame.sprite.Sprite):
             movement = pygame.math.Vector2(0, 0)
 
         if movement.length() > 0:
+            if self.animation != self.run_anim:
+                self.animation = self.run_anim
             movement = movement.normalize()  # нормализуем вектор для одинаковой скорости во всех напоравлениях
 
             for i in range(Player.speed):  # цикл для постепенного движения, чтобы персонаж не залипал в стенах
@@ -99,6 +104,18 @@ class Player(pygame.sprite.Sprite):
                                 movement.x > 0
                         ):
                             self.pos.x -= movement.x
+
+        else:
+            self.animation = self.idle_anim
+
+        if movement.x < 0:
+            self.is_left = True
+        elif movement.x > 0:
+            self.is_left = False
+
+        super().update(ticks)
+        self.image = pygame.transform.flip(self.image, self.is_left, False)
+        self.mask = pygame.mask.from_surface(self.image)
 
         self.rect.x = self.pos.x
         self.rect.y = self.pos.y

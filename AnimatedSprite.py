@@ -3,8 +3,8 @@ import pygame
 
 class AnimatedSprite(pygame.sprite.Sprite):
     # animation - объект класса Animation. Все кадры должны быть одного размера
-    def __init__(self, animation):
-        super().__init__()
+    def __init__(self, group, animation):
+        super().__init__(group)
         self.animation = animation
         self.rect = self.animation.get_current_frame().get_rect()
         self.image = self.animation.get_current_frame()
