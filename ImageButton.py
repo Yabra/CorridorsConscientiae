@@ -1,6 +1,6 @@
 import pygame
 
-from data_loader import load_image
+from data_loader import load_image, load_sound
 
 
 class ImageButton:
@@ -20,6 +20,7 @@ class ImageButton:
                 and
                 (self.rect.y <= pos[1] <= self.rect.y + self.rect.h)
         ):
+            load_sound("click.wav", 1.0).play()
             self.click_func()
 
     def draw(self, screen):

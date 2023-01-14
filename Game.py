@@ -100,7 +100,7 @@ class Game:
 
         # music load
         pygame.mixer.music.set_volume(Settings.MUSIC_VOLUME)
-        load_music("test_music.ogg")
+        load_music("music.ogg")
 
     # метод для начала плавного перехода между состояниями игры
     def make_state_transition(self, func):
@@ -147,6 +147,7 @@ class Game:
         self.block_buttons = False
 
     def next_level(self):
+        load_sound("portal.wav", 1.0).play()
         self.level += 1
         self.score += 100
         self.reset_game()
@@ -158,6 +159,7 @@ class Game:
         self.block_buttons = False
 
     def previous_level(self):
+        load_sound("portal.wav", 1.0).play()
         self.level -= 1
         self.score -= 100
         self.reset_game()
@@ -174,12 +176,14 @@ class Game:
     def heal_mind(self):
         self.score += 100
         self.player.change_mind(Player.max_mind)
+        load_sound("crystal.wav", 0.7).play()
 
     def remove_lostness(self):
         self.score += 100
         self.lostness -= 1
         if self.lostness < 0:
             self.lostness = 0
+        load_sound("crystal.wav", 0.7).play()
 
     # метод перехода в настройки
     def in_settings(self):
@@ -288,7 +292,6 @@ class Game:
                             self.paused = not self.paused
                     elif event.type == pygame.MOUSEBUTTONUP:
                         if event.button == 1 and not self.block_buttons:
-                            load_sound("test.wav", 0.1).play()  # проигрываем тестовый звук
                             if self.paused:
                                 self.resume_button.check_click(event.pos)
                                 self.in_menu_button.check_click(event.pos)

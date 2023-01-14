@@ -1,6 +1,6 @@
 import pygame
 
-from data_loader import load_font
+from data_loader import load_font, load_sound
 
 
 class Button:
@@ -32,6 +32,7 @@ class Button:
                 and
                 (self.rect.y <= pos[1] <= self.rect.y + self.rect.h)
         ):
+            load_sound("click.wav", 1.0).play()
             self.click_func()
 
     def draw(self, screen):

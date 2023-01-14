@@ -1,6 +1,6 @@
 import pygame
 from AnimatedSprite import AnimatedSprite
-from data_loader import load_animation
+from data_loader import load_animation, load_sound
 
 
 class Monster(AnimatedSprite):
@@ -23,12 +23,14 @@ class Monster(AnimatedSprite):
         if pygame.sprite.collide_mask(self, player.shield):
             self.sprites_group.remove(self)
             self.monsters_group.remove(self)
+            load_sound("damage.wav", 0.5).play()
             return
 
         if pygame.sprite.collide_mask(self, player):
             self.collision_func()
             self.sprites_group.remove(self)
             self.monsters_group.remove(self)
+            load_sound("damage.wav", 0.5).play()
             return
 
         if (self.pos - player.pos).length() <= Monster.distance:

@@ -3,7 +3,7 @@ from Tile import TileType
 from Shield import Shield
 from AnimatedSprite import AnimatedSprite
 
-from data_loader import load_animation
+from data_loader import load_animation, load_sound
 
 
 class Player(AnimatedSprite):
@@ -22,9 +22,11 @@ class Player(AnimatedSprite):
         self.shield = Shield(sprites_group)
         self.mind = Player.max_mind
         self.is_left = False
+        self.time = 0
 
     # labyrinth - объект Labyrinth
     def update(self, ticks, labyrinth, items_group):
+        self.time += ticks
         self.shield.update(ticks, self)
         # собираем нажатые клавиши для определения вектора движения
         movement = pygame.math.Vector2(0, 0)
@@ -41,6 +43,9 @@ class Player(AnimatedSprite):
             movement = pygame.math.Vector2(0, 0)
 
         if movement.length() > 0:
+            if self.time > 300:
+                load_sound("step.wav", 0.5).play()
+                self.time = 0
             if self.animation != self.run_anim:
                 self.animation = self.run_anim
             movement = movement.normalize()  # нормализуем вектор для одинаковой скорости во всех напоравлениях
