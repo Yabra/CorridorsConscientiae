@@ -25,6 +25,12 @@ class Database:
         total = sum(list(map(lambda x: x[0], st)))
         return total
 
+    # возвращает сумму очков
+    def get_record(self):
+        st = list(self.cur.execute('''SELECT amount_of_points from points'''))
+        record = max(list(map(lambda x: x[0], st)))
+        return record
+
     # возвращает сколько всего было попыток
     def total_attempts(self):
         st = list(self.cur.execute('''SELECT ID from points'''))

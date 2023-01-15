@@ -89,6 +89,10 @@ class Game:
         self.music_slider = Slider(50, 385, 18, 200, 10, pygame.Color("white"), pygame.Color(0, 0, 150), self.screen)
         self.music_slider.set_value(int(Settings.MUSIC_VOLUME * 100))
 
+        self.clear_db_button = Button(
+            "Очистить рекорды", (650, 550), lambda: self.db.delete_all_points, font_size=30
+        )
+
         self.in_menu_from_settings_button = Button(
             "В меню", (150, 500), lambda: self.make_state_transition(self.in_menu)
         )
@@ -96,7 +100,9 @@ class Game:
         # win
         self.win_text = Text("Вы прошли лабиринт сознания!", (400, 100), font_size=50)
         self.score_text = Text("Очков осознания: ", (400, 250), font_size=40)
-        self.in_menu_from_win_button = Button("В меню", (400, 500), lambda: self.make_state_transition(self.in_menu))
+        self.record_text = Text("Рекорд: ", (400, 350), font_size=40)
+        self.wins_text = Text("Количество прохождений: ", (400, 450), font_size=40)
+        self.in_menu_from_win_button = Button("В меню", (400, 550), lambda: self.make_state_transition(self.in_menu))
 
         # music load
         pygame.mixer.music.set_volume(Settings.MUSIC_VOLUME)
@@ -152,9 +158,11 @@ class Game:
         self.score += 100
         self.reset_game()
         if self.level == 7:
+            self.db.add_points(self.score)
             self.state = GameStates.WIN
             self.score_text.change_text("Очков осознания: " + str(self.score))
-            self.db.add_points(self.score)
+            self.record_text.change_text("Рекорд: " + str(self.db.get_record()))
+            self.wins_text.change_text("Количество прохождений: " + str(self.db.total_attempts()))
         StateTransition.from_black(None)
         self.block_buttons = False
 
@@ -162,6 +170,8 @@ class Game:
         load_sound("portal.wav", 1.0).play()
         self.level -= 1
         self.score -= 100
+        if self.score < 0:
+            self.score = 0
         self.reset_game()
         StateTransition.from_black(None)
         self.block_buttons = False
@@ -169,6 +179,8 @@ class Game:
     def add_lostness(self):
         self.lostness += 1
         self.score -= 100
+        if self.score < 0:
+            self.score = 0
         if self.lostness == 3:
             self.previous_level()
             self.lostness = 0
@@ -260,11 +272,15 @@ class Game:
             self.music_volume_value_text.draw(self.screen)
             self.music_slider.draw_slider()
 
+            self.clear_db_button.draw(self.screen)
+
             self.in_menu_from_settings_button.draw(self.screen)
 
         elif self.state == GameStates.WIN:
             self.win_text.draw(self.screen)
             self.score_text.draw(self.screen)
+            self.record_text.draw(self.screen)
+            self.wins_text.draw(self.screen)
             self.in_menu_from_win_button.draw(self.screen)
 
         # отрисовка плавного перехода
@@ -300,6 +316,7 @@ class Game:
                     if event.type == pygame.MOUSEBUTTONUP:
                         if event.button == 1 and not self.block_buttons:
                             self.in_menu_from_settings_button.check_click(event.pos)
+                            self.clear_db_button.check_click(event.pos)
 
                 elif self.state == GameStates.WIN:
                     if event.type == pygame.MOUSEBUTTONUP:
