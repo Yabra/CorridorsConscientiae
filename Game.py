@@ -42,7 +42,9 @@ class Game:
         self.game_title_text = Text("Corridors Conscientiae", (400, 150), font_size=70)
         self.start_button = Button("Начать игру", (150, 400), lambda: self.make_state_transition(self.start_game))
         self.exit_button = Button("Выход", (150, 480), self.exit)
-        self.settings_button = ImageButton("settings.png", (700, 500), lambda: self.make_state_transition(self.in_settings))
+        self.settings_button = ImageButton(
+            "settings.png", (700, 500), lambda: self.make_state_transition(self.in_settings)
+        )
 
         # game
         self.paused = False
