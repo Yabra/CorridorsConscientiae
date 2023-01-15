@@ -3,6 +3,7 @@ import sys
 import Settings
 from AnimatedSprite import AnimatedSprite
 from Text import Text
+from Image import Image
 from Button import Button
 from Slider import Slider
 from Scale import Scale
@@ -57,20 +58,22 @@ class Game:
         self.all_monsters = pygame.sprite.Group()
 
         self.mind_bar = Scale(
-            50, 50, 30, 200,
+            80, 31, 22, 170,
             Player.max_mind, Player.max_mind,
             True, pygame.Color("gray"), pygame.Color("yellow"),
             self.screen
         )
+        self.mind_bar_frame = Image((55, 15), "scale.png")
 
         self.lostness_bar = Scale(
-            550, 50, 30, 200,
+            555, 31, 22, 173,
             3, 0,
             False, pygame.Color("gray"), pygame.Color(150, 0, 150),
             self.screen
         )
+        self.lostness_bar_frame = Image((530, 15), "scale.png")
 
-        self.level_text = Text("", (400, 50), font_size=40)
+        self.level_text = Text("", (400, 35), font_size=40)
         self.paused_text = Text("Пауза", (400, 150), font_size=70)
         self.resume_button = Button("Продолжить", (150, 400), self.resume)
         self.in_menu_button = Button("В меню", (150, 480), lambda: self.make_state_transition(self.in_menu))
@@ -258,7 +261,9 @@ class Game:
             self.level_text.draw(self.screen)
 
             self.mind_bar.draw_scale()
+            self.mind_bar_frame.draw(self.screen)
             self.lostness_bar.draw_scale()
+            self.lostness_bar_frame.draw(self.screen)
             if self.paused:
                 self.paused_text.draw(self.screen)
                 self.resume_button.draw(self.screen)
