@@ -14,6 +14,7 @@ from Settings import *
 from StateTransition import StateTransition
 from database import *
 from labyrinth_generator import create_maze
+from cheats import check_cheat_key
 
 
 class GameStates:
@@ -306,6 +307,8 @@ class Game:
                     if event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_ESCAPE:
                             self.paused = not self.paused
+                        if Settings.CHEATS:
+                            check_cheat_key(self, event)
                     elif event.type == pygame.MOUSEBUTTONUP:
                         if event.button == 1 and not self.block_buttons:
                             if self.paused:

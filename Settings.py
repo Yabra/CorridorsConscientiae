@@ -13,6 +13,7 @@ def load_settings():
         settings_file = open("data/settings", "r")
         Settings.SOUNDS_VOLUME = float(settings_file.readline())
         Settings.MUSIC_VOLUME = float(settings_file.readline())
+        Settings.CHEATS = settings_file.readline().startswith("CHEATS")
         settings_file.close()
 
     except ValueError:
@@ -39,3 +40,4 @@ def set_music_volume(value):
 class Settings:
     SOUNDS_VOLUME = 1.0
     MUSIC_VOLUME = 1.0
+    CHEATS = False
