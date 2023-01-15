@@ -17,7 +17,8 @@ class Database:
 
     # удвление всего содержимого таблицы
     def delete_all_points(self):
-        self.cur.execute('''DELETE from points''')
+        self.cur.execute('''DELETE FROM points''')
+        self.con.commit()
 
     # возвращает сумму очков
     def sum(self):

@@ -48,7 +48,7 @@ class Player(AnimatedSprite):
                 self.time = 0
             if self.animation != self.run_anim:
                 self.animation = self.run_anim
-            movement = movement.normalize()  # нормализуем вектор для одинаковой скорости во всех напоравлениях
+            movement = movement.normalize() * ticks / 1000 * 50  # нормализуем вектор для одинаковой скорости во всех напоравлениях
 
             for i in range(Player.speed):  # цикл для постепенного движения, чтобы персонаж не залипал в стенах
                 self.pos += movement

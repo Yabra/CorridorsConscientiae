@@ -4,7 +4,7 @@ from data_loader import load_animation, load_sound
 
 
 class Monster(AnimatedSprite):
-    speed = 2
+    speed = 90
     distance = 500
 
     def __init__(self, sprites_group, monsters_group, pos, collision_func):
@@ -34,7 +34,7 @@ class Monster(AnimatedSprite):
             return
 
         if (self.pos - player.pos).length() <= Monster.distance:
-            movement = (player.pos - self.pos).normalize() * Monster.speed
+            movement = (player.pos - self.pos).normalize() * Monster.speed * ticks / 1000
             self.pos += movement
 
             if movement.x < 0:

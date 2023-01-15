@@ -91,7 +91,7 @@ class Game:
         self.music_slider.set_value(int(Settings.MUSIC_VOLUME * 100))
 
         self.clear_db_button = Button(
-            "Очистить рекорды", (650, 550), lambda: self.db.delete_all_points, font_size=30
+            "Очистить рекорды", (650, 550), self.db.delete_all_points, font_size=30
         )
 
         self.in_menu_from_settings_button = Button(
