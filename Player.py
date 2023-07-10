@@ -6,6 +6,12 @@ from AnimatedSprite import AnimatedSprite
 from data_loader import load_animation, load_sound
 
 
+ALT_K_W = 1094
+ALT_K_A = 1092
+ALT_K_S = 1099
+ALT_K_D = 1074
+
+
 class Player(AnimatedSprite):
     speed = 3
     max_mind = 500
@@ -31,13 +37,13 @@ class Player(AnimatedSprite):
         # собираем нажатые клавиши для определения вектора движения
         movement = pygame.math.Vector2(0, 0)
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_LEFT]:
+        if keys[pygame.K_LEFT] or keys[pygame.K_a] or keys[ALT_K_A]:
             movement.x -= 1
-        if keys[pygame.K_RIGHT]:
+        if keys[pygame.K_RIGHT] or keys[pygame.K_d] or keys[ALT_K_D]:
             movement.x += 1
-        if keys[pygame.K_UP]:
+        if keys[pygame.K_UP] or keys[pygame.K_w] or keys[ALT_K_W]:
             movement.y -= 1
-        if keys[pygame.K_DOWN]:
+        if keys[pygame.K_DOWN] or keys[pygame.K_s] or keys[ALT_K_S]:
             movement.y += 1
         if keys[pygame.K_SPACE] and self.mind > 0:  # блокируем передвижение игрока при использовании щита
             movement = pygame.math.Vector2(0, 0)
