@@ -32,7 +32,7 @@ class ScaleImage:
         else:
             screen.blit(
                 self.foreground_image,
-                (self.pos.x + self.size.x - self.size.x * self.value / self.max_value, self.pos.y),
+                (self.pos.x + self.size.x - self.size.x * self.value / self.max_value + 1, self.pos.y),
                 area=(
                     self.size.x - self.size.x * self.value / self.max_value, 0,
                     (self.size.x * self.value / self.max_value), self.size.y

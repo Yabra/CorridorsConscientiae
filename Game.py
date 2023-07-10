@@ -68,12 +68,6 @@ class Game:
         )
         self.mind_bar_frame = Image((55, 15), "scale.png")
 
-        # self.lostness_bar = Scale(
-        #     555, 31, 22, 173,
-        #     3, 0,
-        #     False, pygame.Color("gray"), pygame.Color(150, 0, 150),
-        #     self.screen
-        # )
         self.lostness_bar = ScaleImage(
             555, 31, 3, 0, False, "background_scale.png", "lostness_scale.png"
         )
