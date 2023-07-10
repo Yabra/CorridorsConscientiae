@@ -30,9 +30,9 @@ class Player(AnimatedSprite):
         self.time = 0
 
     # labyrinth - объект Labyrinth
-    def update(self, ticks, labyrinth, items_group):
-        self.time += ticks
-        self.shield.update(ticks, self)
+    def update(self, time, labyrinth, items_group):
+        self.time += time
+        self.shield.update(time, self)
         # собираем нажатые клавиши для определения вектора движения
         movement = pygame.math.Vector2(0, 0)
         keys = pygame.key.get_pressed()
@@ -55,7 +55,7 @@ class Player(AnimatedSprite):
                 self.animation = self.run_anim
 
             # нормализуем вектор для одинаковой скорости во всех напоравлениях
-            movement = movement.normalize() * ticks / 1000 * 50
+            movement = movement.normalize() * time / 1000 * 50
 
             for i in range(Player.speed):  # цикл для постепенного движения, чтобы персонаж не залипал в стенах
                 self.pos += movement
@@ -125,7 +125,7 @@ class Player(AnimatedSprite):
         elif movement.x > 0:
             self.is_left = False
 
-        super().update(ticks)
+        super().update(time)
         self.image = pygame.transform.flip(self.image, self.is_left, False)
         self.mask = pygame.mask.from_surface(self.image)
 

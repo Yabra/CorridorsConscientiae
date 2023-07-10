@@ -38,7 +38,7 @@ class Monster(AnimatedSprite):
             return
 
         if (self.pos - player.pos).length() <= Monster.distance:
-            movement = (player.pos - self.pos).normalize() * Monster.speed * ticks / 1000
+            movement = (player.pos - self.pos).normalize() * Monster.speed * time / 1000
             self.pos += movement
 
             if movement.x < 0:

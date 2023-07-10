@@ -71,12 +71,12 @@ class Game:
         self.mind_bar = ScaleImage(
             80, 31, Player.max_mind, Player.max_mind, True, "background_scale.png", "mind_scale.png"
         )
-        self.mind_bar_frame = Image((55, 15), "scale.png")
+        self.mind_bar_frame = Image(Vector2(55, 15), "scale.png")
 
         self.lostness_bar = ScaleImage(
             555, 31, 3, 0, False, "background_scale.png", "lostness_scale.png"
         )
-        self.lostness_bar_frame = Image((530, 15), "scale.png")
+        self.lostness_bar_frame = Image(Vector2(530, 15), "scale.png")
 
         self.level_text = Text("", (400, 35), font_size=40)
 
