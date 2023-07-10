@@ -2,6 +2,8 @@ import pygame
 
 
 class Slider:
+    clamped_slider = None
+
     # x - координата левого верхнего угла прямоугольника
     # y - координата левого верхнего угла прямоугольника
     # h - высота прямоугольника
@@ -32,18 +34,25 @@ class Slider:
     # эту функцию нужно вызывать в постоянно, чтобы круг не выходил за границы
     def check(self):
         button = pygame.mouse.get_pressed()
+        pos = pygame.mouse.get_pos()
+        x = pos[0]
+        y = pos[1]
+
         if button[0]:
-            pos = pygame.mouse.get_pos()
-            x = pos[0]
-            y = pos[1]
             if (
                 self.y + self.h // 2 - self.r < y < self.y + self.h // 2 + self.r
                 and
                 self.slider_x - self.r < x < self.slider_x + self.r
             ):
-                if x > self.x + self.w:
-                    self.slider_x = self.x + self.w
-                elif x < self.x:
-                    self.slider_x = self.x
-                else:
-                    self.slider_x = x
+                Slider.clamped_slider = self
+
+        else:
+            Slider.clamped_slider = None
+
+        if Slider.clamped_slider == self:
+            if x > self.x + self.w:
+                self.slider_x = self.x + self.w
+            elif x < self.x:
+                self.slider_x = self.x
+            else:
+                self.slider_x = x
