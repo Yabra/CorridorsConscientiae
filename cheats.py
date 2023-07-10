@@ -1,7 +1,9 @@
 import pygame
 
+from Game import Game
 
-def check_cheat_key(game, event):
+
+def check_cheat_key(game: Game, event: pygame.event.Event) -> None:
     if event.mod & pygame.KMOD_CTRL:
         if event.key == pygame.K_l:
             game.next_level()

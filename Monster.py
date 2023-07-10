@@ -1,4 +1,7 @@
+from typing import Callable
+
 import pygame
+
 from AnimatedSprite import AnimatedSprite
 from data_loader import load_animation, load_sound
 
@@ -7,18 +10,19 @@ class Monster(AnimatedSprite):
     speed = 90
     distance = 500
 
-    def __init__(self, sprites_group, monsters_group, pos, collision_func):
+    def __init__(self, sprites_group: pygame.sprite.Group, monsters_group: pygame.sprite.Group, pos: pygame.Vector2,
+                 collision_func: Callable[[], None]):
         super().__init__(load_animation("monster_run", 2, 10), sprites_group, monsters_group)
-        self.sprites_group = sprites_group
-        self.monsters_group = monsters_group
-        self.pos = pos
-        self.collision_func = collision_func
-        self.rect = self.image.get_rect()
-        self.mask = pygame.mask.from_surface(self.image)
-        self.is_left = False
+        self.sprites_group: pygame.sprite.Group = sprites_group
+        self.monsters_group: pygame.sprite.Group = monsters_group
+        self.pos: pygame.Vector2 = pos
+        self.collision_func: Callable[[], None] = collision_func
+        self.rect: pygame.Rect = self.image.get_rect()
+        self.mask: pygame.mask.Mask = pygame.mask.from_surface(self.image)
+        self.is_left: bool = False
 
-    def update(self, ticks, player):
-        super().update(ticks)
+    def update(self, time, player) -> None:
+        super().update(time)
 
         if pygame.sprite.collide_mask(self, player.shield):
             self.sprites_group.remove(self)
@@ -42,7 +46,7 @@ class Monster(AnimatedSprite):
             elif movement.x > 0:
                 self.is_left = False
 
-        super().update(ticks)
+        super().update(time)
         self.image = pygame.transform.flip(self.image, self.is_left, False)
         self.mask = pygame.mask.from_surface(self.image)
 

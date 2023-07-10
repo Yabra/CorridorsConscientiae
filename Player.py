@@ -1,10 +1,9 @@
 import pygame
-from Tile import TileType
-from Shield import Shield
+
 from AnimatedSprite import AnimatedSprite
-
+from Shield import Shield
+from Tile import TileType
 from data_loader import load_animation, load_sound
-
 
 ALT_K_W = 1094
 ALT_K_A = 1092
@@ -70,9 +69,9 @@ class Player(AnimatedSprite):
                                 t.rect.y <= self.rect.y
                                 and
                                 (
-                                    (t.rect.x <= self.rect.x <= t.rect.x + t.rect.w)
-                                    or
-                                    (self.rect.x <= t.rect.x <= self.rect.x + self.rect.w)
+                                        (t.rect.x <= self.rect.x <= t.rect.x + t.rect.w)
+                                        or
+                                        (self.rect.x <= t.rect.x <= self.rect.x + self.rect.w)
                                 )
                                 and
                                 movement.y < 0
@@ -83,9 +82,9 @@ class Player(AnimatedSprite):
                                 t.rect.y >= self.rect.y
                                 and
                                 (
-                                    (t.rect.x <= self.rect.x <= t.rect.x + t.rect.w)
-                                    or
-                                    (self.rect.x <= t.rect.x <= self.rect.x + self.rect.w)
+                                        (t.rect.x <= self.rect.x <= t.rect.x + t.rect.w)
+                                        or
+                                        (self.rect.x <= t.rect.x <= self.rect.x + self.rect.w)
                                 )
                                 and
                                 movement.y > 0
@@ -96,9 +95,9 @@ class Player(AnimatedSprite):
                                 t.rect.x <= self.rect.x
                                 and
                                 (
-                                    (t.rect.y <= self.rect.y <= t.rect.y + t.rect.h)
-                                    or
-                                    (self.rect.y <= t.rect.y <= self.rect.y + self.rect.h)
+                                        (t.rect.y <= self.rect.y <= t.rect.y + t.rect.h)
+                                        or
+                                        (self.rect.y <= t.rect.y <= self.rect.y + self.rect.h)
                                 )
                                 and
                                 movement.x < 0
@@ -109,9 +108,9 @@ class Player(AnimatedSprite):
                                 t.rect.x >= self.rect.x
                                 and
                                 (
-                                    (t.rect.y <= self.rect.y <= t.rect.y + t.rect.h)
-                                    or
-                                    (self.rect.y <= t.rect.y <= self.rect.y + self.rect.h)
+                                        (t.rect.y <= self.rect.y <= t.rect.y + t.rect.h)
+                                        or
+                                        (self.rect.y <= t.rect.y <= self.rect.y + self.rect.h)
                                 )
                                 and
                                 movement.x > 0

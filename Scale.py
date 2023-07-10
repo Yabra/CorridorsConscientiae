@@ -27,7 +27,7 @@ class Scale:
         pygame.draw.rect(self.screen, self.backround_color, (self.x, self.y, self.w, self.h))
         if self.is_right:
             pygame.draw.rect(self.screen, self.foreground_color,
-                             (self.x, self.y,  (self.w * self.value / self.max_value), self.h))
+                             (self.x, self.y, (self.w * self.value / self.max_value), self.h))
         else:
             x = self.x + self.w - self.w * self.value / self.max_value
             pygame.draw.rect(self.screen, self.foreground_color,

@@ -1,13 +1,11 @@
-import pygame
 import random
 
 import Item
-from data_loader import load_image
-from Tile import Tile, TileType
-from Monster import Monster
-from Item import *
-from Player import Player
 from Camera import Camera
+from Item import *
+from Monster import Monster
+from Player import Player
+from Tile import Tile, TileType
 
 
 class Labyrinth:

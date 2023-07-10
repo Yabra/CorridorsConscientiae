@@ -1,26 +1,24 @@
 import sys
 
-import pygame
+from pygame import Vector2
 
-from Item import *
 import Settings
 import Tile
-from AnimatedSprite import AnimatedSprite
-from Text import Text
 from Image import Image
-from Button import Button
-from Slider import Slider
-from Scale import Scale
-from ScaleImage import ScaleImage
 from ImageButton import ImageButton
-from Player import Player
+from Item import *
 from Labyrinth import Labyrinth
-from data_loader import load_image, load_music, load_sound, load_animation
+from Player import Player
+from ScaleImage import ScaleImage
 from Settings import *
+from Slider import Slider
 from StateTransition import StateTransition
+from Text import Text
+from TextButton import TextButton
+from cheats import check_cheat_key
+from data_loader import load_image, load_music, load_sound
 from database import *
 from labyrinth_generator import create_maze
-from cheats import check_cheat_key
 
 
 class GameStates:
@@ -45,11 +43,18 @@ class Game:
         self.block_buttons = False  # переменная для блокировки нажатия кнопок
 
         # menu
-        self.game_title_text = Text("Corridors Conscientiae", (400, 150), font_size=70)
-        self.start_button = Button("Начать игру", (150, 400), lambda: self.make_state_transition(self.start_game))
-        self.exit_button = Button("Выход", (150, 480), self.exit)
+        self.game_title_text = Text("Corridors Conscientiae", Vector2(400, 150), font_size=70)
+        self.start_button = TextButton(
+            Vector2(150, 400), lambda: self.make_state_transition(self.start_game),
+            "Начать игру", color=pygame.Color(150, 0, 0)
+        )
+
+        self.exit_button = TextButton(
+            Vector2(150, 480), self.exit, "Выход", color=pygame.Color(150, 0, 0)
+        )
+
         self.settings_button = ImageButton(
-            "settings.png", (700, 500), lambda: self.make_state_transition(self.in_settings)
+            Vector2(700, 500), lambda: self.make_state_transition(self.in_settings), "settings.png",
         )
 
         # game
@@ -58,7 +63,7 @@ class Game:
         self.level = 0
         self.score = 0
         self.lostness = 0
-        
+
         self.all_sprites = pygame.sprite.Group()
         self.all_items = pygame.sprite.Group()
         self.all_monsters = pygame.sprite.Group()
@@ -74,9 +79,16 @@ class Game:
         self.lostness_bar_frame = Image((530, 15), "scale.png")
 
         self.level_text = Text("", (400, 35), font_size=40)
+
         self.paused_text = Text("Пауза", (400, 150), font_size=70)
-        self.resume_button = Button("Продолжить", (150, 400), self.resume)
-        self.in_menu_button = Button("В меню", (150, 480), lambda: self.make_state_transition(self.in_menu))
+
+        self.resume_button = TextButton(
+            Vector2(150, 400), self.resume, "Продолжить", color=pygame.Color(150, 0, 0)
+        )
+        self.in_menu_button = TextButton(
+            Vector2(150, 480), lambda: self.make_state_transition(self.in_menu), "В меню",
+            color=pygame.Color(150, 0, 0)
+        )
 
         self.camera = None
         self.labyrinth = None
@@ -95,12 +107,14 @@ class Game:
         self.music_slider = Slider(50, 385, 18, 200, 10, pygame.Color("white"), pygame.Color(0, 0, 150), self.screen)
         self.music_slider.set_value(int(Settings.MUSIC_VOLUME * 100))
 
-        self.clear_db_button = Button(
-            "Очистить рекорды", (650, 550), self.db.delete_all_points, font_size=30
+        self.clear_db_button = TextButton(
+            Vector2(650, 550), self.db.delete_all_points, "Очистить рекорды", font_size=30,
+            color=pygame.Color(150, 0, 0)
         )
 
-        self.in_menu_from_settings_button = Button(
-            "В меню", (150, 500), lambda: self.make_state_transition(self.in_menu)
+        self.in_menu_from_settings_button = TextButton(
+            Vector2(150, 500), lambda: self.make_state_transition(self.in_menu), "В меню",
+            color=pygame.Color(150, 0, 0)
         )
 
         # win
@@ -108,7 +122,9 @@ class Game:
         self.score_text = Text("Очков осознания: ", (400, 250), font_size=40)
         self.record_text = Text("Рекорд: ", (400, 350), font_size=40)
         self.wins_text = Text("Количество прохождений: ", (400, 450), font_size=40)
-        self.in_menu_from_win_button = Button("В меню", (400, 550), lambda: self.make_state_transition(self.in_menu))
+        self.in_menu_from_win_button = TextButton(
+            Vector2(400, 550), lambda: self.make_state_transition(self.in_menu), "В меню"
+        )
 
         # music load
         pygame.mixer.music.set_volume(Settings.MUSIC_VOLUME)

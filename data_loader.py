@@ -1,17 +1,19 @@
 import os
 import sys
+from typing import Dict, Tuple
 
 import pygame
+
 from Animation import Animation
 from Settings import Settings
 
-loaded_images = {}
-loaded_sounds = {}
-loaded_fonts = {}
-loaded_animations = {}
+loaded_images: Dict[str, pygame.Surface] = {}
+loaded_sounds: Dict[Tuple[str, float], pygame.mixer.Sound] = {}
+loaded_fonts: Dict[Tuple[str, int], pygame.font.Font] = {}
+loaded_animations: Dict[Tuple[str, int], Animation] = {}
 
 
-def load_image(name, colorkey=None):
+def load_image(name: str, colorkey: pygame.Color = None) -> pygame.Surface:
     global loaded_images
     if name in loaded_images.keys():
         return loaded_images[name]
@@ -36,7 +38,7 @@ def load_image(name, colorkey=None):
     return image
 
 
-def load_music(name):
+def load_music(name: str) -> None:
     fullname = os.path.join('data/sounds', name)
     if not os.path.isfile(fullname):
         print(f"Звуковой файл '{fullname}' не найден")
@@ -45,7 +47,7 @@ def load_music(name):
     pygame.mixer.music.load(fullname)
 
 
-def load_sound(name, volume=1.0):
+def load_sound(name: str, volume: float = 1.0) -> pygame.mixer.Sound:
     global loaded_sounds
     if (name, volume * Settings.SOUNDS_VOLUME) in loaded_sounds.keys():
         return loaded_sounds[(name, volume * Settings.SOUNDS_VOLUME)]
@@ -61,7 +63,7 @@ def load_sound(name, volume=1.0):
     return sound
 
 
-def load_font(name, size):
+def load_font(name: str, size: int) -> pygame.font.Font:
     global loaded_fonts
     if (name, size) in loaded_fonts.keys():
         return loaded_fonts[(name, size)]
@@ -76,7 +78,7 @@ def load_font(name, size):
     return font
 
 
-def load_animation(name, frames_count, fps):
+def load_animation(name: str, frames_count: int, fps: int) -> Animation:
     global loaded_animations
 
     frames = []
