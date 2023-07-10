@@ -11,6 +11,7 @@ from Image import Image
 from Button import Button
 from Slider import Slider
 from Scale import Scale
+from ScaleImage import ScaleImage
 from ImageButton import ImageButton
 from Player import Player
 from Labyrinth import Labyrinth
@@ -62,19 +63,19 @@ class Game:
         self.all_items = pygame.sprite.Group()
         self.all_monsters = pygame.sprite.Group()
 
-        self.mind_bar = Scale(
-            80, 31, 22, 170,
-            Player.max_mind, Player.max_mind,
-            True, pygame.Color("gray"), pygame.Color("yellow"),
-            self.screen
+        self.mind_bar = ScaleImage(
+            80, 31, Player.max_mind, Player.max_mind, True, "background_scale.png", "mind_scale.png"
         )
         self.mind_bar_frame = Image((55, 15), "scale.png")
 
-        self.lostness_bar = Scale(
-            555, 31, 22, 173,
-            3, 0,
-            False, pygame.Color("gray"), pygame.Color(150, 0, 150),
-            self.screen
+        # self.lostness_bar = Scale(
+        #     555, 31, 22, 173,
+        #     3, 0,
+        #     False, pygame.Color("gray"), pygame.Color(150, 0, 150),
+        #     self.screen
+        # )
+        self.lostness_bar = ScaleImage(
+            555, 31, 3, 0, False, "background_scale.png", "lostness_scale.png"
         )
         self.lostness_bar_frame = Image((530, 15), "scale.png")
 
@@ -265,9 +266,9 @@ class Game:
 
             self.level_text.draw(self.screen)
 
-            self.mind_bar.draw_scale()
+            self.mind_bar.draw(self.screen)
             self.mind_bar_frame.draw(self.screen)
-            self.lostness_bar.draw_scale()
+            self.lostness_bar.draw(self.screen)
             self.lostness_bar_frame.draw(self.screen)
 
             if self.minimap:
