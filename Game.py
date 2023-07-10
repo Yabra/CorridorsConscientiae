@@ -1,6 +1,10 @@
 import sys
 
+import pygame
+
+from Item import *
 import Settings
+import Tile
 from AnimatedSprite import AnimatedSprite
 from Text import Text
 from Image import Image
@@ -48,6 +52,7 @@ class Game:
         )
 
         # game
+        self.minimap = False
         self.paused = False
         self.level = 0
         self.score = 0
@@ -264,6 +269,48 @@ class Game:
             self.mind_bar_frame.draw(self.screen)
             self.lostness_bar.draw_scale()
             self.lostness_bar_frame.draw(self.screen)
+
+            if self.minimap:
+                pygame.draw.rect(self.screen, pygame.Color(50, 50, 50), (610, 410, 190, 190))
+                pygame.draw.rect(self.screen, pygame.Color(0, 0, 0), (615, 415, 180, 180))
+                start_x = 615 + 180 // 2 - self.labyrinth.size[0] * 2
+                start_y = 415 + 180 // 2 - self.labyrinth.size[1] * 2
+
+                pygame.draw.rect(
+                    self.screen, pygame.Color(0, 255, 0),
+                    (start_x + self.player.pos.x // 32, start_y + self.player.pos.y // 32, 2, 2)
+                )
+
+                for t in self.labyrinth.tiles_group:
+                    if t.tile_type == Tile.TileType.WALL:
+                        pygame.draw.rect(
+                            self.screen, pygame.Color(30, 30, 30),
+                            (start_x + t.rect.x // 32, start_y + t.rect.y // 32, 2, 2)
+                        )
+
+                for m in self.all_monsters:
+                    pygame.draw.rect(
+                        self.screen, pygame.Color(255, 0, 0),
+                        (start_x + m.pos.x // 32, start_y + m.pos.y // 32, 2, 2)
+                    )
+
+                for i in self.all_items:
+                    if i.item_type == ItemType.PORTAL:
+                        pygame.draw.rect(
+                            self.screen, pygame.Color(255, 20, 147),
+                            (start_x + i.rect.x // 32, start_y + i.rect.y // 32, 2, 2)
+                        )
+                    elif i.item_type == ItemType.MIND_CRYSTAL:
+                        pygame.draw.rect(
+                            self.screen, pygame.Color(255, 255, 0),
+                            (start_x + i.rect.x // 32, start_y + i.rect.y // 32, 2, 2)
+                        )
+                    elif i.item_type == ItemType.LOSTNESS_CRYSTAL:
+                        pygame.draw.rect(
+                            self.screen, pygame.Color(150, 0, 150),
+                            (start_x + i.rect.x // 32, start_y + i.rect.y // 32, 2, 2)
+                        )
+
             if self.paused:
                 self.paused_text.draw(self.screen)
                 self.resume_button.draw(self.screen)

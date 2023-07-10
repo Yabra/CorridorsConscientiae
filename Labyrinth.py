@@ -1,9 +1,11 @@
 import pygame
 import random
+
+import Item
 from data_loader import load_image
 from Tile import Tile, TileType
 from Monster import Monster
-from Item import Item
+from Item import *
 from Player import Player
 from Camera import Camera
 
@@ -55,14 +57,17 @@ class Labyrinth:
                         Item(
                             sprites_group,
                             items_group,
+                            ItemType.MIND_CRYSTAL,
                             ((x * 2 + 0.5) * tile_size, (y * 2 + random.choice([0, 0.5, 1.25, 1.5])) * tile_size),
-                            game.heal_mind, "crystal0.png"
+                            game.heal_mind,
+                            "crystal0.png"
                         )  # кристалл восстановления разума
 
                     else:
                         Item(
                             sprites_group,
                             items_group,
+                            ItemType.LOSTNESS_CRYSTAL,
                             ((x * 2 + 0.5) * tile_size, (y * 2 + random.choice([0, 0.5, 1.25, 1.5])) * tile_size),
                             game.remove_lostness,
                             "crystal1.png"
@@ -72,6 +77,7 @@ class Labyrinth:
                     Item(
                         sprites_group,
                         items_group,
+                        ItemType.PORTAL,
                         ((x * 2 + 0.5) * tile_size, (y * 2 + 0.5) * tile_size),
                         lambda: game.make_state_transition(game.next_level),
                         "portal.png"
