@@ -1,6 +1,6 @@
 import os
 import sys
-from typing import Dict, Tuple
+from typing import Dict, Tuple, List
 
 import pygame
 
@@ -10,7 +10,7 @@ from Settings import Settings
 loaded_images: Dict[str, pygame.Surface] = {}
 loaded_sounds: Dict[Tuple[str, float], pygame.mixer.Sound] = {}
 loaded_fonts: Dict[Tuple[str, int], pygame.font.Font] = {}
-loaded_animations: Dict[Tuple[str, int], Animation] = {}
+loaded_animations: Dict[Tuple[str, int], List[pygame.Surface]] = {}
 
 
 def load_image(name: str, colorkey: pygame.Color = None) -> pygame.Surface:

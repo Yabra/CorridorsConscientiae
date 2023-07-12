@@ -15,12 +15,6 @@ class AnimatedSprite(pygame.sprite.Sprite):
             Квадрат, описывающий размеры кадров анимации
         image : pygame.Surface
             Изображение, использующееся для отрисовки спрайта при отрисовке группы
-
-    Методы:
-        update(time: int) -> None
-            Обновляет кадр анимации. Должен вызываться перед отрисовкой
-        set_animation(self, new_animation: Animation) -> None
-            Обновляет кадр анимации. Должен вызываться перед отрисовкой
     """
 
     def __init__(self, animation: Animation, *groups: pygame.sprite.Group):
@@ -48,6 +42,11 @@ class AnimatedSprite(pygame.sprite.Sprite):
         self.image = self.animation.get_current_frame()
 
     def set_animation(self, new_animation: Animation) -> None:
+        """
+            Устанавливает новую анимацию для данного анимированного спрайта
+
+        :param new_animation:
+        """
         self.animation = new_animation
         self.rect = self.animation.get_current_frame().get_rect()
         self.image = self.animation.get_current_frame()
