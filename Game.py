@@ -123,7 +123,8 @@ class Game:
         self.record_text = Text("Рекорд: ", (400, 350), font_size=40)
         self.wins_text = Text("Количество прохождений: ", (400, 450), font_size=40)
         self.in_menu_from_win_button = TextButton(
-            Vector2(400, 550), lambda: self.make_state_transition(self.in_menu), "В меню"
+            Vector2(400, 550), lambda: self.make_state_transition(self.in_menu), "В меню",
+            color=pygame.Color(150, 0, 0)
         )
 
         # music load
@@ -166,10 +167,10 @@ class Game:
 
     # метод для старта игры
     def start_game(self):
-        self.reset_game()
         self.level = 0
         self.score = 0
         self.lostness = 0
+        self.reset_game()
         # окончание плавного перехода и возвражение кнопкам кликабельности
         StateTransition.from_black(None)
         self.block_buttons = False
@@ -362,7 +363,12 @@ class Game:
 
                 # орбработка нажатий клавиш клавиатуры и кликов
                 if self.state == GameStates.MENU:
-                    if event.type == pygame.MOUSEBUTTONUP:
+                    if event.type == pygame.MOUSEMOTION:
+                        self.start_button.check_highlight(event.pos)
+                        self.settings_button.check_highlight(event.pos)
+                        self.exit_button.check_highlight(event.pos)
+
+                    elif event.type == pygame.MOUSEBUTTONUP:
                         if event.button == 1 and not self.block_buttons:
                             self.start_button.check_click(event.pos)
                             self.settings_button.check_click(event.pos)
@@ -372,8 +378,15 @@ class Game:
                     if event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_ESCAPE:
                             self.paused = not self.paused
+
                         if Settings.CHEATS:
                             check_cheat_key(self, event)
+
+                    elif event.type == pygame.MOUSEMOTION:
+                        if self.paused:
+                            self.resume_button.check_highlight(event.pos)
+                            self.in_menu_button.check_highlight(event.pos)
+
                     elif event.type == pygame.MOUSEBUTTONUP:
                         if event.button == 1 and not self.block_buttons:
                             if self.paused:
@@ -381,13 +394,20 @@ class Game:
                                 self.in_menu_button.check_click(event.pos)
 
                 elif self.state == GameStates.SETTINGS:
-                    if event.type == pygame.MOUSEBUTTONUP:
+                    if event.type == pygame.MOUSEMOTION:
+                        self.in_menu_from_settings_button.check_highlight(event.pos)
+                        self.clear_db_button.check_highlight(event.pos)
+
+                    elif event.type == pygame.MOUSEBUTTONUP:
                         if event.button == 1 and not self.block_buttons:
                             self.in_menu_from_settings_button.check_click(event.pos)
                             self.clear_db_button.check_click(event.pos)
 
                 elif self.state == GameStates.WIN:
-                    if event.type == pygame.MOUSEBUTTONUP:
+                    if event.type == pygame.MOUSEMOTION:
+                        self.in_menu_from_win_button.check_highlight(event.pos)
+
+                    elif event.type == pygame.MOUSEBUTTONUP:
                         if event.button == 1 and not self.block_buttons:
                             self.in_menu_from_win_button.check_click(event.pos)
 
