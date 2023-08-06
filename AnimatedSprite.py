@@ -41,9 +41,18 @@ class AnimatedSprite(pygame.sprite.Sprite):
         self.animation.update(time)
         self.image = self.animation.get_current_frame()
 
+    def get_animation(self) -> Animation:
+        """
+        Возвращает анимацию спрайта
+
+        :return:
+            Анимация спрайта
+        """
+        return self.animation
+
     def set_animation(self, new_animation: Animation) -> None:
         """
-            Устанавливает новую анимацию для данного анимированного спрайта
+        Устанавливает новую анимацию для данного анимированного спрайта
 
         :param new_animation:
         """

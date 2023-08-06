@@ -2,8 +2,8 @@ from typing import Callable
 
 import pygame
 
-from add_brightness import add_brightness
 from ButtonBase import ButtonBase
+from add_brightness import add_brightness
 from data_loader import load_image
 
 
