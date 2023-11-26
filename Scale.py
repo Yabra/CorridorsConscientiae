@@ -11,20 +11,24 @@ class Scale:
     # backround_color - цвет не заполненной шкалы
     # foreground_color - цвет заполненной шкалы
     # is_rigth - начение типа bool, если True, то шкала заполняется справа
-    def __init__(self, x, y, h, w, max_value, value, is_rigth, backround_color, foreground_color, screen):
+    def __init__(self,
+                 x: int, y: int, h: int, w: int,
+                 max_value: int, value: int, is_right: bool,
+                 background_color: pygame.Color, foreground_color: pygame.Color,
+                 screen: pygame.Surface):
         self.x = x
         self.y = y
         self.w = w
         self.h = h
-        self.backround_color = backround_color
+        self.background_color = background_color
         self.foreground_color = foreground_color
         self.screen = screen
         self.max_value = max_value
-        self.is_right = is_rigth
+        self.is_right = is_right
         self.value = value
 
-    def draw_scale(self):
-        pygame.draw.rect(self.screen, self.backround_color, (self.x, self.y, self.w, self.h))
+    def draw_scale(self) -> None:
+        pygame.draw.rect(self.screen, self.background_color, (self.x, self.y, self.w, self.h))
         if self.is_right:
             pygame.draw.rect(self.screen, self.foreground_color,
                              (self.x, self.y, (self.w * self.value / self.max_value), self.h))
@@ -34,5 +38,5 @@ class Scale:
                              (x, self.y, (self.w * self.value / self.max_value), self.h))
 
     # можно задать новое значение value
-    def update(self, new_value):
+    def update(self, new_value: int) -> None:
         self.value = new_value

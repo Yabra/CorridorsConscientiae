@@ -1,3 +1,5 @@
+from typing import Callable
+
 import pygame
 
 
@@ -14,7 +16,7 @@ class StateTransition:
     func = None  # функция, вызывающаяся при окончании этапа перехода
 
     # обновление класса
-    def update(ticks):
+    def update(ticks: int) -> None:
         StateTransition.time += ticks
         if StateTransition.time >= StateTransition.transition_time:
             StateTransition.time = 1000
@@ -23,7 +25,7 @@ class StateTransition:
                 StateTransition.func = None
 
     # отрисовка (вызов должен находиться после отрисовки всех спрайтов и т.п.)
-    def draw(screen):
+    def draw(screen: pygame.Surface) -> None:
         surface = pygame.Surface((pygame.display.get_window_size()[0], pygame.display.get_window_size()[1]))
         surface.fill(pygame.Color(0, 0, 0))
 
@@ -36,13 +38,13 @@ class StateTransition:
         screen.blit(surface, (0, 0))
 
     # функция перехода в режим затемнения
-    def to_black(func):
+    def to_black(func: Callable[[], None]) -> None:
         StateTransition.time = 0
         StateTransition.transition_type = TransitionType.TO_BLACK
         StateTransition.func = func
 
     # функция перехода в режим просветления
-    def from_black(func):
+    def from_black(func: Callable[[], None]) -> None:
         StateTransition.time = 0
         StateTransition.transition_type = TransitionType.FROM_BLACK
         StateTransition.func = func

@@ -17,7 +17,7 @@ class Player(AnimatedSprite):
 
     # sprites_group - группа всех спрайтов для отрисовки камерой
     # pos           - изначальная позиция игрока (pygame.math.Vector2)
-    def __init__(self, sprites_group, pos, mind):
+    def __init__(self, sprites_group: pygame.sprite.Group, pos: pygame.Vector2, mind: int):
         self.idle_anim = load_animation("player_idle", 1, 8)
         self.run_anim = load_animation("player_run", 4, 8)
 
@@ -30,7 +30,7 @@ class Player(AnimatedSprite):
         self.time = 0
 
     # labyrinth - объект Labyrinth
-    def update(self, time, labyrinth, items_group):
+    def update(self, time: int, labyrinth, items_group: pygame.sprite.Group) -> None:
         self.time += time
         self.shield.update(time, self)
         # собираем нажатые клавиши для определения вектора движения
@@ -136,7 +136,7 @@ class Player(AnimatedSprite):
         for i in items_collide:
             i.collide()
 
-    def change_mind(self, value):
+    def change_mind(self, value: int) -> None:
         self.mind += value
         if self.mind < 0:
             self.mind = 0

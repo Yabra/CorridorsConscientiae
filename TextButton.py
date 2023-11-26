@@ -60,7 +60,7 @@ class TextButton(ButtonBase):
 
         super().__init__(self.default_rect, click_func, can_highlight)
 
-    def draw(self, screen) -> None:
+    def draw(self, screen: pygame.Surface) -> None:
         if self.highlight:
             self.set_rect(self.highlight_rect)
             screen.blit(self.rendered_highlighted_text, (self.rect.x, self.rect.y))

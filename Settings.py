@@ -1,14 +1,14 @@
 import pygame
 
 
-def save_settings():
+def save_settings() -> None:
     settings_file = open("data/settings", "w")
     settings_file.write(str(Settings.SOUNDS_VOLUME) + "\n")
     settings_file.write(str(Settings.MUSIC_VOLUME) + "\n")
     settings_file.close()
 
 
-def load_settings():
+def load_settings() -> None:
     try:
         settings_file = open("data/settings", "r")
         Settings.SOUNDS_VOLUME = float(settings_file.readline())
@@ -28,11 +28,11 @@ def load_settings():
         save_settings()
 
 
-def set_sounds_volume(value):
+def set_sounds_volume(value: int) -> None:
     Settings.SOUNDS_VOLUME = value / 100
 
 
-def set_music_volume(value):
+def set_music_volume(value: int) -> None:
     Settings.MUSIC_VOLUME = value / 100
     pygame.mixer.music.set_volume(Settings.MUSIC_VOLUME)
 

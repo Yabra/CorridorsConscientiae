@@ -3,6 +3,7 @@ from typing import Callable
 import pygame
 
 from AnimatedSprite import AnimatedSprite
+from Player import Player
 from data_loader import load_animation, load_sound
 
 
@@ -21,7 +22,7 @@ class Monster(AnimatedSprite):
         self.mask: pygame.mask.Mask = pygame.mask.from_surface(self.image)
         self.is_left: bool = False
 
-    def update(self, time, player) -> None:
+    def update(self, time: int, player: Player) -> None:
         super().update(time)
 
         if pygame.sprite.collide_mask(self, player.shield):

@@ -1,5 +1,7 @@
 import random
 
+import pygame
+
 import Item
 from Camera import Camera
 from Item import *
@@ -27,7 +29,7 @@ class Labyrinth:
                                 sprites_group,
                                 self.tiles_group,
                                 TileType.WALL,
-                                ((x * 2 + dx) * tile_size, (y * 2 + dy) * tile_size)
+                                pygame.Vector2((x * 2 + dx) * tile_size, (y * 2 + dy) * tile_size)
                             )
 
                 else:
@@ -37,7 +39,7 @@ class Labyrinth:
                                 sprites_group,
                                 self.tiles_group,
                                 TileType.FLOOR,
-                                ((x * 2 + dx) * tile_size, (y * 2 + dy) * tile_size)
+                                pygame.Vector2((x * 2 + dx) * tile_size, (y * 2 + dy) * tile_size)
                             )
 
         for x in range(self.size[0]):

@@ -1,5 +1,6 @@
 import sys
 
+import pygame
 from pygame import Vector2
 
 import Settings
@@ -78,9 +79,9 @@ class Game:
         )
         self.lostness_bar_frame = Image(Vector2(530, 15), "scale.png")
 
-        self.level_text = Text("", (400, 35), font_size=40)
+        self.level_text = Text("", pygame.Vector2(400, 35), font_size=40)
 
-        self.paused_text = Text("Пауза", (400, 150), font_size=70)
+        self.paused_text = Text("Пауза", pygame.Vector2(400, 150), font_size=70)
 
         self.resume_button = TextButton(
             Vector2(150, 400), self.resume, "Продолжить", color=pygame.Color(150, 0, 0)
@@ -95,15 +96,15 @@ class Game:
         self.player = None
 
         # settings
-        self.settings_text = Text("Настройки", (400, 100), font_size=70)
+        self.settings_text = Text("Настройки", pygame.Vector2(400, 100), font_size=70)
 
-        self.sounds_volume_text = Text("Громкость звуков", (150, 200), font_size=30)
-        self.sounds_volume_value_text = Text("", (150, 240), font_size=40)
+        self.sounds_volume_text = Text("Громкость звуков", pygame.Vector2(150, 200), font_size=30)
+        self.sounds_volume_value_text = Text("", pygame.Vector2(150, 240), font_size=40)
         self.sounds_slider = Slider(50, 265, 18, 200, 10, pygame.Color("white"), pygame.Color(0, 0, 150), self.screen)
         self.sounds_slider.set_value(int(Settings.SOUNDS_VOLUME * 100))
 
-        self.music_volume_text = Text("Громкость музыки", (150, 320), font_size=30)
-        self.music_volume_value_text = Text("", (150, 360), font_size=40)
+        self.music_volume_text = Text("Громкость музыки", pygame.Vector2(150, 320), font_size=30)
+        self.music_volume_value_text = Text("", pygame.Vector2(150, 360), font_size=40)
         self.music_slider = Slider(50, 385, 18, 200, 10, pygame.Color("white"), pygame.Color(0, 0, 150), self.screen)
         self.music_slider.set_value(int(Settings.MUSIC_VOLUME * 100))
 
@@ -118,10 +119,10 @@ class Game:
         )
 
         # win
-        self.win_text = Text("Вы прошли лабиринт сознания!", (400, 100), font_size=50)
-        self.score_text = Text("Очков осознания: ", (400, 250), font_size=40)
-        self.record_text = Text("Рекорд: ", (400, 350), font_size=40)
-        self.wins_text = Text("Количество прохождений: ", (400, 450), font_size=40)
+        self.win_text = Text("Вы прошли лабиринт сознания!", pygame.Vector2(400, 100), font_size=50)
+        self.score_text = Text("Очков осознания: ", pygame.Vector2(400, 250), font_size=40)
+        self.record_text = Text("Рекорд: ", pygame.Vector2(400, 350), font_size=40)
+        self.wins_text = Text("Количество прохождений: ", pygame.Vector2(400, 450), font_size=40)
         self.in_menu_from_win_button = TextButton(
             Vector2(400, 550), lambda: self.make_state_transition(self.in_menu), "В меню",
             color=pygame.Color(150, 0, 0)
@@ -132,19 +133,19 @@ class Game:
         load_music("music.ogg")
 
     # метод для начала плавного перехода между состояниями игры
-    def make_state_transition(self, func):
+    def make_state_transition(self, func: Callable[[], None]) -> None:
         StateTransition.to_black(func)
         self.block_buttons = True
 
     # метод перехода в меню
-    def in_menu(self):
+    def in_menu(self) -> None:
         self.state = GameStates.MENU
 
         # окончание плавного перехода и возвражение кнопкам кликабельности
         StateTransition.from_black(None)
         self.block_buttons = False
 
-    def reset_game(self):
+    def reset_game(self) -> None:
         self.state = GameStates.GAME
 
         self.paused = False
@@ -166,7 +167,7 @@ class Game:
         )
 
     # метод для старта игры
-    def start_game(self):
+    def start_game(self) -> None:
         self.level = 0
         self.score = 0
         self.lostness = 0
@@ -175,7 +176,7 @@ class Game:
         StateTransition.from_black(None)
         self.block_buttons = False
 
-    def next_level(self):
+    def next_level(self) -> None:
         load_sound("portal.wav", 1.0).play()
         self.level += 1
         self.score += 100
@@ -189,7 +190,7 @@ class Game:
         StateTransition.from_black(None)
         self.block_buttons = False
 
-    def previous_level(self):
+    def previous_level(self) -> None:
         load_sound("portal.wav", 1.0).play()
         self.level -= 1
         self.score -= 100
@@ -199,7 +200,7 @@ class Game:
         StateTransition.from_black(None)
         self.block_buttons = False
 
-    def add_lostness(self):
+    def add_lostness(self) -> None:
         self.lostness += 1
         self.score -= 100
         if self.score < 0:
@@ -208,12 +209,12 @@ class Game:
             self.previous_level()
             self.lostness = 0
 
-    def heal_mind(self):
+    def heal_mind(self) -> None:
         self.score += 100
         self.player.change_mind(Player.max_mind)
         load_sound("crystal.wav", 0.7).play()
 
-    def remove_lostness(self):
+    def remove_lostness(self) -> None:
         self.score += 100
         self.lostness -= 1
         if self.lostness < 0:
@@ -221,7 +222,7 @@ class Game:
         load_sound("crystal.wav", 0.7).play()
 
     # метод перехода в настройки
-    def in_settings(self):
+    def in_settings(self) -> None:
         self.state = GameStates.SETTINGS
 
         # окончание плавного перехода и возвражение кнопкам кликабельности
@@ -229,10 +230,10 @@ class Game:
         self.block_buttons = False
 
     # метод снятия игры с паузы
-    def resume(self):
+    def resume(self) -> None:
         self.paused = False
 
-    def update(self, ticks):
+    def update(self, ticks: int) -> None:
         if self.state == GameStates.MENU:
             pass
         elif self.state == GameStates.GAME:
@@ -263,7 +264,7 @@ class Game:
         # обновление плавного перехода
         StateTransition.update(ticks)
 
-    def draw(self):
+    def draw(self) -> None:
         self.screen.fill((0, 0, 0))
 
         if self.state == GameStates.MENU:
@@ -355,7 +356,7 @@ class Game:
 
         pygame.display.flip()
 
-    def run(self):
+    def run(self) -> None:
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:  # обработка закрытия оккна крестиком
@@ -420,7 +421,7 @@ class Game:
             self.update(ticks)
             self.draw()
 
-    def exit(self):
+    def exit(self) -> None:
         pygame.quit()
         save_settings()
         sys.exit()

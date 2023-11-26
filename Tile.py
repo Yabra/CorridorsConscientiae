@@ -14,7 +14,9 @@ class Tile(pygame.sprite.Sprite):
     # tiles_group   - группа тайлов для проверки столкновений игрока с тайлами
     # tile_type     - значение из TileType
     # pos           - позиция тайла относительно центра координат
-    def __init__(self, sprites_group, tiles_group, tile_type, pos):
+    def __init__(self,
+                 sprites_group: pygame.sprite.Group, tiles_group: pygame.sprite.Group,
+                 tile_type: TileType, pos: pygame.Vector2):
         super().__init__(sprites_group, tiles_group)
         self.tile_type = tile_type
         if tile_type == TileType.FLOOR:

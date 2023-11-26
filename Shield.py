@@ -6,7 +6,7 @@ from data_loader import load_image
 class Shield(pygame.sprite.Sprite):
     max_size = 90
 
-    def __init__(self, sprites_group):
+    def __init__(self, sprites_group: pygame.sprite.Group):
         super().__init__(sprites_group)
         self.size = 0
         self.image = pygame.Surface((0, 0))
@@ -14,7 +14,7 @@ class Shield(pygame.sprite.Sprite):
         self.time = 0
         self.mask = pygame.mask.from_surface(self.image)
 
-    def update(self, ticks, player):
+    def update(self, ticks: int, player) -> None:
         self.time += ticks
         if self.time >= 30:
             if player.mind <= 0:
